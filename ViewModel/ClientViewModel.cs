@@ -67,7 +67,7 @@ namespace QuizGame.ViewModel
 
 		public string PlayerName
 		{
-			get { return this.playerName; }
+			get { return this.playerName ?? string.Empty; }
 			set
 			{
 				if (this.SetProperty(ref this.playerName, value))

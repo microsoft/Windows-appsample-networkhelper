@@ -37,6 +37,19 @@ using Windows.UI.Xaml.Media;
 
 namespace QuizGame.ViewModel
 {
+    public class PlayerProgress
+    {
+        public SolidColorBrush AnsweredCurrentQuestionBrush { get; internal set; }
+        public FontWeight AnsweredCurrentQuestionFontWeight { get; internal set; }
+        public string Name { get; internal set; }
+    }
+
+    public class PlayerResult
+    {
+        public string Name { get; internal set; }
+        public Int32 Score { get; internal set; }
+    }
+
     public class HostViewModel : BindableBase
     {
         public IGame Game { get; private set; }
@@ -51,7 +64,7 @@ namespace QuizGame.ViewModel
             this.Game = game;
             this.HostCommunicator = hostCommunicator;
 
-            this.Game.PropertyChanged += (s, e) => 
+            this.Game.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName.Equals("SubmittedAnswers"))
                 {
@@ -85,11 +98,12 @@ namespace QuizGame.ViewModel
             get
             {
                 return this.startGameCommand ?? (this.startGameCommand = new DelegateCommand(
-                    () => {
+                    () =>
+                    {
                         this.Game.StartGame();
                         this.OnQuestionChanged();
                         this.GameState = GameState.GameUnderway;
-                    }, 
+                    },
                     () => this.GameState == GameState.Lobby));
             }
         }
@@ -100,7 +114,8 @@ namespace QuizGame.ViewModel
             get
             {
                 return this.nextCommand ?? (this.nextCommand = new DelegateCommand(
-                    () => {
+                    () =>
+                    {
                         this.Game.NextQuestion();
                         this.OnQuestionChanged();
                         if (this.Game.IsGameOver) this.GameState = GameState.Results;
@@ -112,19 +127,23 @@ namespace QuizGame.ViewModel
 
         public DelegateCommand EndGameCommand
         {
-			get { return this.endGameCommand ?? (this.endGameCommand = new DelegateCommand(
-                () => {
-                    this.GameState = GameState.Lobby;
-                    this.NextButtonText = "Next question";
-                },
-                () => this.GameState == GameState.Results)); }
+            get
+            {
+                return this.endGameCommand ?? (this.endGameCommand = new DelegateCommand(
+              () =>
+              {
+                  this.GameState = GameState.Lobby;
+                  this.NextButtonText = "Next question";
+              },
+              () => this.GameState == GameState.Results));
+            }
         }
         private DelegateCommand endGameCommand;
 
         public GameState GameState
         {
             get { return this.Game.GameState; }
-            set 
+            set
             {
                 if (this.Game.GameState != value)
                 {
@@ -140,16 +159,40 @@ namespace QuizGame.ViewModel
             }
         }
 
-        public Visibility StartVisibility { get { return 
-            this.GameState == GameState.Lobby ? Visibility.Visible : Visibility.Collapsed; } }
-        public Visibility GameUnderwayVisibility { get { return 
-            this.GameState == GameState.GameUnderway ? Visibility.Visible : Visibility.Collapsed; } }
-        public Visibility ResultsVisibility { get { return 
-            this.GameState == GameState.Results ? Visibility.Visible : Visibility.Collapsed; } }
-        public string CurrentQuestionText { get { return 
-            this.Game.CurrentQuestion == null ? String.Empty : this.Game.CurrentQuestion.Text; } }
+        public Visibility StartVisibility
+        {
+            get
+            {
+                return
+this.GameState == GameState.Lobby ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        public Visibility GameUnderwayVisibility
+        {
+            get
+            {
+                return
+this.GameState == GameState.GameUnderway ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        public Visibility ResultsVisibility
+        {
+            get
+            {
+                return
+this.GameState == GameState.Results ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        public string CurrentQuestionText
+        {
+            get
+            {
+                return
+this.Game.CurrentQuestion == null ? String.Empty : this.Game.CurrentQuestion.Text;
+            }
+        }
 
-        public string NextButtonText 
+        public string NextButtonText
         {
             get { return this.nextButtonText; }
             set { this.SetProperty(ref this.nextButtonText, value); }
@@ -158,31 +201,34 @@ namespace QuizGame.ViewModel
 
         public List<object> PlayerProgress
         {
-            get 
-            { 
-                var players = this.Game.SubmittedAnswers.AsEnumerable().Select(kvp => new 
-                { 
-                    Name = kvp.Key, 
-                    AnsweredCurrentQuestionFontWeight = 
-                        this.Game.CurrentQuestion != null && 
+            get
+            {
+                var players = this.Game.SubmittedAnswers.AsEnumerable().Select(kvp => new PlayerProgress
+                {
+                    Name = kvp.Key,
+                    AnsweredCurrentQuestionFontWeight =
+                        this.Game.CurrentQuestion != null &&
                         kvp.Value.ContainsKey(this.Game.CurrentQuestion) &&
                         kvp.Value[this.Game.CurrentQuestion].HasValue ?
                             FontWeights.ExtraBold : FontWeights.Normal,
-					AnsweredCurrentQuestionBrush =
-						this.Game.CurrentQuestion != null &&
-						kvp.Value.ContainsKey(this.Game.CurrentQuestion) &&
-						kvp.Value[this.Game.CurrentQuestion].HasValue ?
-							new SolidColorBrush(Colors.Green) : 
-                            new SolidColorBrush(Colors.LightGray) 
+                    AnsweredCurrentQuestionBrush =
+                        this.Game.CurrentQuestion != null &&
+                        kvp.Value.ContainsKey(this.Game.CurrentQuestion) &&
+                        kvp.Value[this.Game.CurrentQuestion].HasValue ?
+                            new SolidColorBrush(Colors.Green) :
+                            new SolidColorBrush(Colors.LightGray)
                 });
-                return players.ToList<object>(); 
+                return players.ToList<object>();
             }
         }
 
         public List<object> PlayerResults
         {
-            get { return this.Game.GetResults().Select(kvp => 
-                new { Name = kvp.Key, Score = kvp.Value }).ToList<object>(); }
+            get
+            {
+                return this.Game.GetResults().Select(kvp =>
+              new PlayerResult { Name = kvp.Key, Score = kvp.Value }).ToList<object>();
+            }
         }
 
         private void OnQuestionChanged()

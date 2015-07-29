@@ -26,7 +26,7 @@ THE SOFTWARE.
     x:Class="QuizGame.View.HostView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:QuizGame.View"
+    xmlns:viewmodel="using:QuizGame.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -56,16 +56,16 @@ THE SOFTWARE.
             </Setter>
         </Style>
 
-        <DataTemplate x:Key="PlayerTemplate">
+        <DataTemplate x:Key="PlayerTemplate" x:DataType="x:String">
             <Grid>
-                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{Binding}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="12,0,12,12"/>
+                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="12,0,12,12"/>
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Key="PlayerProgressTemplate">
+        <DataTemplate x:Key="PlayerProgressTemplate" x:DataType="viewmodel:PlayerProgress">
             <StackPanel>
-                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Foreground="{Binding AnsweredCurrentQuestionBrush}" FontWeight="{Binding AnsweredCurrentQuestionFontWeight}" 
-                    Text="{Binding Name}"  
+                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Foreground="{x:Bind AnsweredCurrentQuestionBrush}" FontWeight="{x:Bind AnsweredCurrentQuestionFontWeight}" 
+                    Text="{x:Bind Name}"  
                     TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="12,0,12,12"/>
             </StackPanel>
         </DataTemplate>
@@ -78,12 +78,12 @@ THE SOFTWARE.
             <Setter Property="Foreground" Value="{ThemeResource DefaultTextForegroundThemeBrush}"/>
         </Style>
 
-        <DataTemplate x:Key="PlayerResultsTemplate">
+        <DataTemplate x:Key="PlayerResultTemplate" x:DataType="viewmodel:PlayerResult">
             <Grid Width="200" Height="200" Margin="20">
                 <Border Background="#FF994D4D"/>
                 <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
-                    <TextBlock Style="{StaticResource PlayerNameTextBlockStyle}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="12,0,24,0" Text="{Binding Name}"/>
-                    <TextBlock Style="{StaticResource PlayerScoreTextBlockStyle}" Text="{Binding Score}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="12,0,12,12"/>
+                    <TextBlock Style="{StaticResource PlayerNameTextBlockStyle}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="12,0,24,0" Text="{x:Bind Name}"/>
+                    <TextBlock Style="{StaticResource PlayerScoreTextBlockStyle}" Text="{x:Bind Score}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="12,0,12,12"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -120,7 +120,7 @@ THE SOFTWARE.
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Back button and page title -->
+        <!-- Page title -->
         <Grid x:Name="pageTitleGrid" Grid.Column="1" Height="60">
             <TextBlock x:Name="pageTitle" Text="QuizGame" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="-30,0,0,0"/>
@@ -134,14 +134,13 @@ THE SOFTWARE.
             </Grid.RowDefinitions>
 
             <!--Lobby-->
-            <StackPanel Visibility="{Binding StartVisibility}">
+            <StackPanel Visibility="{x:Bind ViewModel.StartVisibility, Mode=OneWay}">
                 <TextBlock Text="Launch QuizGame on your phone, and tap join..." TextWrapping="WrapWholeWords"/>
-                <ItemsControl ItemsSource="{Binding Game.PlayerNames}" ItemTemplate="{StaticResource PlayerTemplate}" Margin="0,24,0,0"/>
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Game.PlayerNames}" ItemTemplate="{StaticResource PlayerTemplate}" Margin="0,24,0,0"/>
             </StackPanel>
 
             <!--Game underway-->
-
-            <Grid Visibility="{Binding GameUnderwayVisibility}">
+            <Grid Visibility="{x:Bind ViewModel.GameUnderwayVisibility, Mode=OneWay}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -152,26 +151,26 @@ THE SOFTWARE.
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="{Binding CurrentQuestionText}" TextWrapping="WrapWholeWords" Margin="0,0,0,24"/>
+                <TextBlock Text="{x:Bind ViewModel.CurrentQuestionText, Mode=OneWay}" TextWrapping="WrapWholeWords" Margin="0,0,0,24"/>
 
                 <!--Options-->
-                <ContentControl Content="{Binding Game.CurrentQuestion.Options[0]}" Style="{StaticResource OptionContentControlStyle}" Background="#FFAA80FF" Grid.Row="1"/>
-                <ContentControl Content="{Binding Game.CurrentQuestion.Options[1]}" Style="{StaticResource OptionContentControlStyle}" Background="#FF8080FF" Grid.Row="2"/>
-                <ContentControl Content="{Binding Game.CurrentQuestion.Options[2]}" Style="{StaticResource OptionContentControlStyle}" Background="#FF80AAFF" Grid.Row="3"/>
-                <ContentControl Content="{Binding Game.CurrentQuestion.Options[3]}" Style="{StaticResource OptionContentControlStyle}" Background="#FF80D5FF" Grid.Row="4"/>
+                <ContentControl Content="{x:Bind ViewModel.Game.CurrentQuestion.Options[0], Mode=OneWay}" Style="{StaticResource OptionContentControlStyle}" Background="#FFAA80FF" Grid.Row="1"/>
+                <ContentControl Content="{x:Bind ViewModel.Game.CurrentQuestion.Options[1], Mode=OneWay}" Style="{StaticResource OptionContentControlStyle}" Background="#FF8080FF" Grid.Row="2"/>
+                <ContentControl Content="{x:Bind ViewModel.Game.CurrentQuestion.Options[2], Mode=OneWay}" Style="{StaticResource OptionContentControlStyle}" Background="#FF80AAFF" Grid.Row="3"/>
+                <ContentControl Content="{x:Bind ViewModel.Game.CurrentQuestion.Options[3], Mode=OneWay}" Style="{StaticResource OptionContentControlStyle}" Background="#FF80D5FF" Grid.Row="4"/>
 
                 <!--Players-->
-                <ItemsControl ItemsSource="{Binding PlayerProgress}" ItemTemplate="{StaticResource PlayerProgressTemplate}" Grid.Row="6"/>
+                <ItemsControl ItemsSource="{x:Bind ViewModel.PlayerProgress, Mode=OneWay}" ItemTemplate="{StaticResource PlayerProgressTemplate}" Grid.Row="6"/>
             </Grid>
 
             <!--Results-->
-            <ScrollViewer Visibility="{Binding ResultsVisibility}">
-                <ItemsControl ItemsSource="{Binding PlayerResults}" ItemTemplate="{StaticResource PlayerResultsTemplate}"/>
+            <ScrollViewer Visibility="{x:Bind ViewModel.ResultsVisibility, Mode=OneWay}">
+                <ItemsControl ItemsSource="{x:Bind ViewModel.PlayerResults, Mode=OneWay}" ItemTemplate="{StaticResource PlayerResultTemplate}"/>
             </ScrollViewer>
 
-            <Button Content="Start game" Command="{Binding StartGameCommand}" Visibility="{Binding StartVisibility}" MinWidth="150" Grid.Row="1" VerticalAlignment="Top"/>
-            <Button Content="{Binding NextButtonText}" Command="{Binding NextCommand}" Visibility="{Binding GameUnderwayVisibility}" MinWidth="150" Grid.Row="1" VerticalAlignment="Top"/>
-            <Button Content="Return to lobby" Command="{Binding EndGameCommand}" Visibility="{Binding ResultsVisibility}" MinWidth="150" Grid.Row="1" VerticalAlignment="Top"/>
+            <Button Content="Start game" Command="{x:Bind ViewModel.StartGameCommand}" Visibility="{x:Bind ViewModel.StartVisibility, Mode=OneWay}" MinWidth="150" Grid.Row="1" VerticalAlignment="Top"/>
+            <Button Content="{x:Bind ViewModel.NextButtonText, Mode=OneWay}" Command="{x:Bind ViewModel.NextCommand}" Visibility="{x:Bind ViewModel.GameUnderwayVisibility, Mode=OneWay}" MinWidth="150" Grid.Row="1" VerticalAlignment="Top"/>
+            <Button Content="Return to lobby" Command="{x:Bind ViewModel.EndGameCommand}" Visibility="{x:Bind ViewModel.ResultsVisibility, Mode=OneWay}" MinWidth="150" Grid.Row="1" VerticalAlignment="Top"/>
 
         </Grid>
     </Grid>

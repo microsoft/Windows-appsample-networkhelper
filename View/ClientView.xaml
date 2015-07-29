@@ -32,7 +32,7 @@ THE SOFTWARE.
     mc:Ignorable="d"
     d:DesignHeight="600"
     d:DesignWidth="400">
-    
+
     <UserControl.Resources>
         <Style x:Key="OptionButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -57,29 +57,29 @@ THE SOFTWARE.
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock Text="QUIZGAME" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="{Binding StateName}" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock Text="{x:Bind ViewModel.StateName, Mode=OneWay}" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <StackPanel Visibility="{Binding JoinVisibility}" Margin="50,0">
-                <TextBlock Text="This name is already taken, please choose another." TextWrapping="WrapWholeWords" Visibility="{Binding ErrorMessageVisibility}" Foreground="Red" FontSize="18" />
-                <TextBox Text="{Binding PlayerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="15" Header="Player name" FontSize="18"/>
-                <Button Content="Join game" Command="{Binding JoinGameCommand}" Style="{StaticResource CommandButtonStyle}"/>
+            <StackPanel Visibility="{x:Bind ViewModel.JoinVisibility, Mode=OneWay}" Margin="50,0">
+                <TextBlock Text="This name is already taken, please choose another." TextWrapping="WrapWholeWords" Visibility="{x:Bind ViewModel.ErrorMessageVisibility, Mode=OneWay}" Foreground="Red" FontSize="18" />
+                <TextBox Text="{x:Bind ViewModel.PlayerName, Mode=TwoWay}" Margin="15" Header="Player name" FontSize="18"/>
+                <Button Content="Join game" Command="{x:Bind ViewModel.JoinGameCommand}" Style="{StaticResource CommandButtonStyle}"/>
             </StackPanel>
             <StackPanel>
-                <Grid Visibility="{Binding QuestionAvailableVisibility}">
+                <Grid Visibility="{x:Bind ViewModel.QuestionAvailableVisibility, Mode=OneWay}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Content="{Binding CurrentQuestion.Options[0]}" Command="{Binding AnswerQuestionCommand}" CommandParameter="0" Style="{StaticResource OptionButtonStyle}" Background="#FFAA80FF"/>
-                    <Button Content="{Binding CurrentQuestion.Options[1]}" Command="{Binding AnswerQuestionCommand}" CommandParameter="1" Style="{StaticResource OptionButtonStyle}" Background="#FF8080FF" Grid.Row="1"/>
-                    <Button Content="{Binding CurrentQuestion.Options[2]}" Command="{Binding AnswerQuestionCommand}" CommandParameter="2" Style="{StaticResource OptionButtonStyle}" Background="#FF80AAFF" Grid.Row="2"/>
-                    <Button Content="{Binding CurrentQuestion.Options[3]}" Command="{Binding AnswerQuestionCommand}" CommandParameter="3" Style="{StaticResource OptionButtonStyle}" Background="#FF80D5FF" Grid.Row="3"/>
+                    <Button Content="{x:Bind ViewModel.CurrentQuestion.Options[0], Mode=OneWay}" Command="{x:Bind ViewModel.AnswerQuestionCommand}" CommandParameter="0" Style="{StaticResource OptionButtonStyle}" Background="#FFAA80FF"/>
+                    <Button Content="{x:Bind ViewModel.CurrentQuestion.Options[1], Mode=OneWay}" Command="{x:Bind ViewModel.AnswerQuestionCommand}" CommandParameter="1" Style="{StaticResource OptionButtonStyle}" Background="#FF8080FF" Grid.Row="1"/>
+                    <Button Content="{x:Bind ViewModel.CurrentQuestion.Options[2], Mode=OneWay}" Command="{x:Bind ViewModel.AnswerQuestionCommand}" CommandParameter="2" Style="{StaticResource OptionButtonStyle}" Background="#FF80AAFF" Grid.Row="2"/>
+                    <Button Content="{x:Bind ViewModel.CurrentQuestion.Options[3], Mode=OneWay}" Command="{x:Bind ViewModel.AnswerQuestionCommand}" CommandParameter="3" Style="{StaticResource OptionButtonStyle}" Background="#FF80D5FF" Grid.Row="3"/>
                 </Grid>
-                <Button Content="Leave game" Command="{Binding LeaveGameCommand}" Visibility="{Binding GameUnderwayVisibility}" Style="{StaticResource CommandButtonStyle}"/>
+                <Button Content="Leave game" Command="{x:Bind ViewModel.LeaveGameCommand}" Visibility="{x:Bind ViewModel.GameUnderwayVisibility, Mode=OneWay}" Style="{StaticResource CommandButtonStyle}"/>
             </StackPanel>
         </Grid>
     </Grid>

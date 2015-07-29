@@ -107,36 +107,36 @@ namespace QuizGame.ViewModel
                     Text = "In which year was Microsoft founded?", 
                     Options = new List<string> { "1971", "1973", "1975", "1977" }, 
                     CorrectAnswerIndex = 2 
-                }, 
-                new Question 
-                { 
-                    Text = "What was the Microsoft slogan in 2005?", 
-                    Options = new List<string> 
-                    { 
+                },
+                new Question
+                {
+                    Text = "What was the Microsoft slogan in 2005?",
+                    Options = new List<string>
+                    {
                         "A computer on every desktop.",
-                        "Where do you want to go today?", 
-                        "Your Potential. Our Passion.", 
-                        "Be what's next." 
-                    }, 
-                    CorrectAnswerIndex = 1 
+                        "Where do you want to go today?",
+                        "Your Potential. Our Passion.",
+                        "Be what's next."
+                    },
+                    CorrectAnswerIndex = 1
                 },
-                new Question 
-                { 
-                    Text = "Including Clippy, how many Office Assistants were in Office 97?", 
-                    Options = new List<string> { "5", "7", "9", "Wait...there were others?" }, 
-                    CorrectAnswerIndex = 2 
+                new Question
+                {
+                    Text = "Including Clippy, how many Office Assistants were in Office 97?",
+                    Options = new List<string> { "5", "7", "9", "Wait...there were others?" },
+                    CorrectAnswerIndex = 2
                 },
-                new Question 
-                { 
-                    Text = "The dog Rover, in what 1995 Microsoft product, could be considered a precursor to Cortana?", 
-                    Options = new List<string> 
-                    { 
+                new Question
+                {
+                    Text = "The dog Rover, in what 1995 Microsoft product, could be considered a precursor to Cortana?",
+                    Options = new List<string>
+                    {
                         "Microsoft Encarta",
-                        "Microsoft Bob", 
-                        "Microsoft Live One Care", 
-                        "Microsoft Live Mesh" 
-                    }, 
-                    CorrectAnswerIndex = 1 
+                        "Microsoft Bob",
+                        "Microsoft Live One Care",
+                        "Microsoft Live Mesh"
+                    },
+                    CorrectAnswerIndex = 1
                 }
             };
 			return new Game(questions);

@@ -87,10 +87,10 @@ namespace QuizGame.Model
 
         private void SendCurrentQuestion()
         {
-            if (this.currentQuestionIndex < this.Questions.Count)
-            {
-                this.NewQuestionAvailable(this, new QuestionEventArgs { Question = this.CurrentQuestion });
-            }
+            // Do this even if this.currentQuestionIndex < this.Questions.Count, because the client needs to know
+            // when the current question goes to null so it can update its UI state.
+            this.NewQuestionAvailable(this, new QuestionEventArgs { Question = this.CurrentQuestion });
+
             this.OnPropertyChanged(() => this.CurrentQuestion);
             this.OnPropertyChanged(() => this.IsGameOver);
             this.OnPropertyChanged(() => this.Winner);

@@ -44,9 +44,9 @@ THE SOFTWARE.
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <View:HostView DataContext="{Binding HostViewModel, Source={StaticResource Locator}}" Grid.RowSpan="2"/>
-        <View:ClientView Grid.Column="1" DataContext="{Binding ClientViewModel, Source={StaticResource Locator}}"/>
-		<View:ClientView Grid.Column="1" DataContext="{Binding ClientViewModel2, Source={StaticResource Locator}}" Grid.Row="1"/>
+        <View:HostView Grid.RowSpan="2" x:Name="hostView"/>
+        <View:ClientView Grid.Column="1" x:Name="clientView"/>
+        <View:ClientView Grid.Column="1" Grid.Row="1" x:Name="clientView2"/>
 
 	</Grid>
 
