@@ -68,7 +68,7 @@ namespace QuizGame.ViewModel
             {
                 if (e.PropertyName.Equals("SubmittedAnswers"))
                 {
-                    this.OnPropertyChanged(() => this.PlayerProgress);
+                    this.OnPropertyChanged(nameof(PlayerProgress));
                 }
                 if (e.PropertyName.Equals("CurrentQuestion") &&
                     this.Game.Questions.Last() == this.Game.CurrentQuestion)
@@ -148,10 +148,10 @@ namespace QuizGame.ViewModel
                 if (this.Game.GameState != value)
                 {
                     this.Game.GameState = value;
-                    this.OnPropertyChanged(() => this.StartVisibility);
-                    this.OnPropertyChanged(() => this.GameUnderwayVisibility);
-                    this.OnPropertyChanged(() => this.ResultsVisibility);
-                    this.OnPropertyChanged(() => this.PlayerResults);
+                    this.OnPropertyChanged(nameof(StartVisibility));
+                    this.OnPropertyChanged(nameof(GameUnderwayVisibility));
+                    this.OnPropertyChanged(nameof(ResultsVisibility));
+                    this.OnPropertyChanged(nameof(PlayerResults));
                     this.StartGameCommand.RaiseCanExecuteChanged();
                     this.NextCommand.RaiseCanExecuteChanged();
                     this.EndGameCommand.RaiseCanExecuteChanged();
@@ -233,8 +233,8 @@ this.Game.CurrentQuestion == null ? String.Empty : this.Game.CurrentQuestion.Tex
 
         private void OnQuestionChanged()
         {
-            this.OnPropertyChanged(() => this.CurrentQuestionText);
-            this.OnPropertyChanged(() => this.PlayerProgress);
+            this.OnPropertyChanged(nameof(CurrentQuestionText));
+            this.OnPropertyChanged(nameof(PlayerProgress));
         }
 
     }

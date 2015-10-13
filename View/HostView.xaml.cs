@@ -25,8 +25,6 @@
 using QuizGame.ViewModel;
 using Windows.UI.Xaml.Controls;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace QuizGame.View
 {
     public sealed partial class HostView : UserControl
@@ -36,6 +34,6 @@ namespace QuizGame.View
             this.InitializeComponent();
         }
 
-        public HostViewModel ViewModel { get; set; }
+        public HostViewModel ViewModel { get; } = ViewModelLocator.HostViewModel;
     }
 }

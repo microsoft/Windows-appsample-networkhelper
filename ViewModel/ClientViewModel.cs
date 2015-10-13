@@ -32,13 +32,13 @@ using Windows.UI.Xaml;
 
 namespace QuizGame.ViewModel
 {
-	public class ClientViewModel : BindableBase
-	{
+    public class ClientViewModel : BindableBase
+    {
         private IClientCommunicator ClientCommunicator { get; set; }
         private bool IsQuestionAnswered { get; set; }
 
-		public ClientViewModel(IClientCommunicator clientCommunicator)
-		{
+        public ClientViewModel(IClientCommunicator clientCommunicator)
+        {
             if (clientCommunicator == null) throw new ArgumentNullException("clientCommunicator");
             this.ClientCommunicator = clientCommunicator;
 
@@ -56,57 +56,57 @@ namespace QuizGame.ViewModel
                     this.ErrorMessageVisibility = e.IsJoined ? Visibility.Collapsed : Visibility.Visible;
                 });
             this.ClientCommunicator.Initialize();
-		}
+        }
 
-		public string StateName
-		{
-			get { return this.stateName; }
-			set { this.SetProperty(ref this.stateName, value); }
-		}
-		private string stateName;
+        public string StateName
+        {
+            get { return this.stateName; }
+            set { this.SetProperty(ref this.stateName, value); }
+        }
+        private string stateName;
 
-		public string PlayerName
-		{
-			get { return this.playerName ?? string.Empty; }
-			set
-			{
-				if (this.SetProperty(ref this.playerName, value))
-				{
+        public string PlayerName
+        {
+            get { return this.playerName ?? string.Empty; }
+            set
+            {
+                if (this.SetProperty(ref this.playerName, value))
+                {
                     this.ErrorMessageVisibility = Visibility.Collapsed;
-					this.JoinGameCommand.RaiseCanExecuteChanged();
-				}
-			}
-		}
-		private string playerName;
+                    this.JoinGameCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+        private string playerName;
 
-		public bool CanJoin
-		{
-			get { return this.canJoin && this.PlayerName != null && this.PlayerName.Length != 0; }
-			set
-			{
-				if (this.SetProperty(ref this.canJoin, value))
-				{
-					this.JoinGameCommand.RaiseCanExecuteChanged();
-				}
-			}
-		}
-		private bool canJoin;
+        public bool CanJoin
+        {
+            get { return this.canJoin && this.PlayerName != null && this.PlayerName.Length != 0; }
+            set
+            {
+                if (this.SetProperty(ref this.canJoin, value))
+                {
+                    this.JoinGameCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+        private bool canJoin;
 
-		public bool IsJoined
-		{
-			get { return this.isJoined; }
-			set
-			{
-				if (this.SetProperty(ref this.isJoined, value))
-				{
-					this.OnPropertyChanged(() => this.JoinVisibility);
-					this.OnPropertyChanged(() => this.GameUnderwayVisibility);
-					this.OnPropertyChanged(() => this.QuestionAvailableVisibility);
-				}
-				this.StateName = this.isJoined ? "stand by..." : "lobby";
-			}
-		}
-		private bool isJoined;
+        public bool IsJoined
+        {
+            get { return this.isJoined; }
+            set
+            {
+                if (this.SetProperty(ref this.isJoined, value))
+                {
+                    this.OnPropertyChanged(nameof(JoinVisibility));
+                    this.OnPropertyChanged(nameof(GameUnderwayVisibility));
+                    this.OnPropertyChanged(nameof(QuestionAvailableVisibility));
+                }
+                this.StateName = this.isJoined ? "stand by..." : "lobby";
+            }
+        }
+        private bool isJoined;
 
         public Visibility ErrorMessageVisibility
         {
@@ -116,50 +116,50 @@ namespace QuizGame.ViewModel
         private Visibility errorMessageVisibility = Visibility.Collapsed;
 
         public Visibility JoinVisibility
-		{
-			get { return !this.IsJoined ? Visibility.Visible : Visibility.Collapsed; }
-		}
+        {
+            get { return !this.IsJoined ? Visibility.Visible : Visibility.Collapsed; }
+        }
 
-		public Visibility GameUnderwayVisibility
-		{
-			get { return this.IsJoined ? Visibility.Visible : Visibility.Collapsed; }
-		}
+        public Visibility GameUnderwayVisibility
+        {
+            get { return this.IsJoined ? Visibility.Visible : Visibility.Collapsed; }
+        }
 
-		public Visibility QuestionAvailableVisibility
-		{
-			get { return this.IsJoined && this.CurrentQuestion != null ? Visibility.Visible : Visibility.Collapsed; }
-		}
+        public Visibility QuestionAvailableVisibility
+        {
+            get { return this.IsJoined && this.CurrentQuestion != null ? Visibility.Visible : Visibility.Collapsed; }
+        }
 
-		public Question CurrentQuestion
-		{
-			get { return this.currentQuestion; }
-			set
-			{
-				if (this.IsJoined && this.SetProperty(ref this.currentQuestion, value))
-				{
-					this.OnPropertyChanged(() => this.QuestionAvailableVisibility);
-					this.StateName = this.currentQuestion == null ? "lobby" : "make a selection...";
-					this.IsQuestionAnswered = false;
-					this.AnswerQuestionCommand.RaiseCanExecuteChanged();
-				}
-			}
-		}
-		private Question currentQuestion;
+        public Question CurrentQuestion
+        {
+            get { return this.currentQuestion; }
+            set
+            {
+                if (this.IsJoined && this.SetProperty(ref this.currentQuestion, value))
+                {
+                    this.OnPropertyChanged(nameof(QuestionAvailableVisibility));
+                    this.StateName = this.currentQuestion == null ? "lobby" : "make a selection...";
+                    this.IsQuestionAnswered = false;
+                    this.AnswerQuestionCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+        private Question currentQuestion;
 
-		public DelegateCommand JoinGameCommand
-		{
-			get
-			{
-				return this.joinGameCommand ?? (this.joinGameCommand = new DelegateCommand(
+        public DelegateCommand JoinGameCommand
+        {
+            get
+            {
+                return this.joinGameCommand ?? (this.joinGameCommand = new DelegateCommand(
                     () => this.ClientCommunicator.JoinGame(this.PlayerName), 
                     () => this.CanJoin));
-			}
-		}
-		private DelegateCommand joinGameCommand;
+            }
+        }
+        private DelegateCommand joinGameCommand;
 
-		public DelegateCommand LeaveGameCommand
-		{
-			get 
+        public DelegateCommand LeaveGameCommand
+        {
+            get 
             { 
                 return this.leaveGameCommand ?? (this.leaveGameCommand = new DelegateCommand(
                     () => {
@@ -168,24 +168,24 @@ namespace QuizGame.ViewModel
                         this.CurrentQuestion = null;
                     })); 
             }
-		}
-		private DelegateCommand leaveGameCommand;
+        }
+        private DelegateCommand leaveGameCommand;
 
-		public DelegateCommand<string> AnswerQuestionCommand
-		{
-			get 
+        public DelegateCommand<string> AnswerQuestionCommand
+        {
+            get 
             { 
                 return this.answerQuestionCommand ?? (this.answerQuestionCommand = new DelegateCommand<string>(
                     option => {
                         this.ClientCommunicator.AnswerQuestion(PlayerName, Int32.Parse(option));
-			            this.IsQuestionAnswered = true;
-			            this.AnswerQuestionCommand.RaiseCanExecuteChanged();
-			            this.StateName = "thank you";
+                        this.IsQuestionAnswered = true;
+                        this.AnswerQuestionCommand.RaiseCanExecuteChanged();
+                        this.StateName = "thank you";
                     }, 
                     option => !this.IsQuestionAnswered)); 
             }
-		}
-		private DelegateCommand<string> answerQuestionCommand;
+        }
+        private DelegateCommand<string> answerQuestionCommand;
 
-	}
+    }
 }

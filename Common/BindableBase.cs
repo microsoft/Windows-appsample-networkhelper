@@ -72,14 +72,5 @@ namespace QuizGame.Common
         {
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        /// <summary>
-        /// Notifies listeners that a property value has changed.
-        /// </summary>
-        /// <param name="expression">Lambda expression that identifies the property used to notify listeners.</param>
-        protected void OnPropertyChanged<TProperty>(Expression<Func<TProperty>> expression)
-        {
-            this.PropertyChanged(this, new PropertyChangedEventArgs((expression.Body as MemberExpression).Member.Name));
-        }
     }
 }

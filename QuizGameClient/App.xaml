@@ -29,15 +29,14 @@ THE SOFTWARE.
     xmlns:local="using:QuizGameClient"
     xmlns:viewmodel="using:QuizGame.ViewModel">
 
-	<Application.Resources>
-		<viewmodel:ViewModelLocator x:Key="Locator"/>
-		<x:Int32 x:Key="PivotHeaderItemCharacterSpacing">-25</x:Int32>
-		<Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
-			<Setter Property="FontWeight" Value="Normal"/>
-		</Style>
-		<Style TargetType="Button">
-			<Setter Property="Margin" Value="12"/>
-		</Style>
-	</Application.Resources>
+    <Application.Resources>
+        <x:Int32 x:Key="PivotHeaderItemCharacterSpacing">-25</x:Int32>
+        <Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="12"/>
+        </Style>
+    </Application.Resources>
 
 </Application>

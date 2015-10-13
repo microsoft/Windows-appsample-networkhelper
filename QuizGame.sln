@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizGameHost", "QuizGameHost\QuizGameHost.csproj", "{05D4E5FD-14DB-4982-9DCC-7AD10D11D0A7}"
 EndProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizGameTests", "QuizGameTests\QuizGameTests.csproj", "{D5687D50-F68B-4BF3-AABB-CC7349E98552}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizGameTests", "QuizGameTests\QuizGameTests.csproj", "{0DCE564F-5636-43C9-A655-5600EFBFB5E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,24 +78,24 @@ Global
 		{737229AE-D189-4765-B37B-31A326996A70}.Release|x64.Build.0 = Release|x64
 		{737229AE-D189-4765-B37B-31A326996A70}.Release|x86.ActiveCfg = Release|x86
 		{737229AE-D189-4765-B37B-31A326996A70}.Release|x86.Build.0 = Release|x86
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|ARM.ActiveCfg = Debug|ARM
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|ARM.Build.0 = Debug|ARM
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|ARM.Deploy.0 = Debug|ARM
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|x64.ActiveCfg = Debug|x64
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|x64.Build.0 = Debug|x64
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|x64.Deploy.0 = Debug|x64
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|x86.ActiveCfg = Debug|x86
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|x86.Build.0 = Debug|x86
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Debug|x86.Deploy.0 = Debug|x86
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|ARM.ActiveCfg = Release|ARM
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|ARM.Build.0 = Release|ARM
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|ARM.Deploy.0 = Release|ARM
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|x64.ActiveCfg = Release|x64
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|x64.Build.0 = Release|x64
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|x64.Deploy.0 = Release|x64
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|x86.ActiveCfg = Release|x86
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|x86.Build.0 = Release|x86
-		{D5687D50-F68B-4BF3-AABB-CC7349E98552}.Release|x86.Deploy.0 = Release|x86
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|ARM.ActiveCfg = Debug|ARM
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|ARM.Build.0 = Debug|ARM
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|ARM.Deploy.0 = Debug|ARM
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|x64.ActiveCfg = Debug|x64
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|x64.Build.0 = Debug|x64
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|x64.Deploy.0 = Debug|x64
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|x86.ActiveCfg = Debug|x86
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|x86.Build.0 = Debug|x86
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Debug|x86.Deploy.0 = Debug|x86
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|ARM.ActiveCfg = Release|ARM
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|ARM.Build.0 = Release|ARM
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|ARM.Deploy.0 = Release|ARM
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|x64.ActiveCfg = Release|x64
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|x64.Build.0 = Release|x64
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|x64.Deploy.0 = Release|x64
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|x86.ActiveCfg = Release|x86
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|x86.Build.0 = Release|x86
+		{0DCE564F-5636-43C9-A655-5600EFBFB5E9}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

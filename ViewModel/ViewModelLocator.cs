@@ -29,18 +29,18 @@ using Windows.ApplicationModel;
 
 namespace QuizGame.ViewModel
 {
-	public class ViewModelLocator
-	{
-		IClientCommunicator clientCommunicator;
+    public static class ViewModelLocator
+    {
+        private static IClientCommunicator clientCommunicator;
 #if LOCALTESTMODEON
-		IClientCommunicator clientCommunicator2;
+        private static IClientCommunicator clientCommunicator2;
 #endif
-		IHostCommunicator hostCommunicator;
+        private static IHostCommunicator hostCommunicator;
 
-		public ViewModelLocator()
-		{
+        static ViewModelLocator()
+        {
 #if LOCALTESTMODEON
-			hostCommunicator = new MockHostCommunicator();
+            hostCommunicator = new MockHostCommunicator();
             var mockHostCommunicator = hostCommunicator as MockHostCommunicator;
             clientCommunicator = new MockClientCommunicator { Host = mockHostCommunicator };
             clientCommunicator2 = new MockClientCommunicator { Host = mockHostCommunicator };
@@ -56,51 +56,51 @@ namespace QuizGame.ViewModel
             clientCommunicator = new ClientCommunicator(new P2PSessionClient(config));
             hostCommunicator = new HostCommunicator(new P2PSessionHost(config));
 #endif
-		}
+        }
 
-		public ClientViewModel ClientViewModel
-		{
-			get
-			{
-				return this.clientViewModel ?? (this.clientViewModel = 
+        public static ClientViewModel ClientViewModel
+        {
+            get
+            {
+                return clientViewModel ?? (clientViewModel = 
                     new ClientViewModel(clientCommunicator) { IsJoined = DesignMode.DesignModeEnabled });
-			}
-		}
-		ClientViewModel clientViewModel;
+            }
+        }
+        private static ClientViewModel clientViewModel;
 
 #if LOCALTESTMODEON
-		public ClientViewModel ClientViewModel2
-		{
-			get
-			{
-				return this.clientViewModel2 ?? (this.clientViewModel2 = this.clientViewModel2 =
-					new ClientViewModel(clientCommunicator2) { IsJoined = DesignMode.DesignModeEnabled });
-			}
-		}
-		ClientViewModel clientViewModel2;
+        public static ClientViewModel ClientViewModel2
+        {
+            get
+            {
+                return clientViewModel2 ?? (clientViewModel2 = clientViewModel2 =
+                    new ClientViewModel(clientCommunicator2) { IsJoined = DesignMode.DesignModeEnabled });
+            }
+        }
+        private static ClientViewModel clientViewModel2;
 #endif
 
-		public HostViewModel HostViewModel
-		{
-			get
-			{
+        public static HostViewModel HostViewModel
+        {
+            get
+            {
 #if LOCALTESTMODEON
-				var game = GetSampleGame();
+                var game = GetSampleGame();
 #else
                 // TODO get real game data when not testing and not in design mode
-				var game = DesignMode.DesignModeEnabled ? GetSampleGame() : GetSampleGame();
+                var game = DesignMode.DesignModeEnabled ? GetSampleGame() : GetSampleGame();
 #endif
-				return this.hostViewModel ?? (this.hostViewModel = new HostViewModel(game, hostCommunicator)
-				{
-					GameState = DesignMode.DesignModeEnabled ? GameState.GameUnderway : GameState.Lobby
-				});
-			}
-		}
-		HostViewModel hostViewModel;
+                return hostViewModel ?? (hostViewModel = new HostViewModel(game, hostCommunicator)
+                {
+                    GameState = DesignMode.DesignModeEnabled ? GameState.GameUnderway : GameState.Lobby
+                });
+            }
+        }
+        private static HostViewModel hostViewModel;
 
-		private Game GetSampleGame()
-		{
-			var questions = new List<Question>
+        private static Game GetSampleGame()
+        {
+            var questions = new List<Question>
             {
                 new Question 
                 { 
@@ -139,7 +139,7 @@ namespace QuizGame.ViewModel
                     CorrectAnswerIndex = 1
                 }
             };
-			return new Game(questions);
-		}
-	}
+            return new Game(questions);
+        }
+    }
 }

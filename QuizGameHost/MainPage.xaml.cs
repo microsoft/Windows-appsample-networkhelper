@@ -24,24 +24,13 @@
 
 using Windows.UI.Xaml.Controls;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace QuizGameHost
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
         {
             this.InitializeComponent();
-            this.Loading += TestView_Loading;
-        }
-
-        private void TestView_Loading(Windows.UI.Xaml.FrameworkElement sender, object args)
-        {
-            this.hostView.ViewModel = App.HostViewModel;
         }
     }
 }

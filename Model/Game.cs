@@ -47,12 +47,12 @@ namespace QuizGame.Model
 
         public void AddPlayer(string playerName)
         {
-			if (this.PlayerNames.Contains(playerName)) playerName += ".";
-			this.PlayerNames.Add(playerName);
+            if (this.PlayerNames.Contains(playerName)) playerName += ".";
+            this.PlayerNames.Add(playerName);
             this.SubmittedAnswers.Add(playerName, 
                 new Dictionary<Question, int?>(this.Questions.Count));
-            this.OnPropertyChanged(() => this.PlayerNames);
-            this.OnPropertyChanged(() => this.SubmittedAnswers);
+            this.OnPropertyChanged(nameof(PlayerNames));
+            this.OnPropertyChanged(nameof(SubmittedAnswers));
         }
 
         public void RemovePlayer(string playerName)
@@ -60,8 +60,8 @@ namespace QuizGame.Model
             if (this.PlayerNames.Remove(playerName))
             {
                 this.SubmittedAnswers.Remove(playerName);
-                this.OnPropertyChanged(() => this.PlayerNames);
-                this.OnPropertyChanged(() => this.SubmittedAnswers);
+                this.OnPropertyChanged(nameof(PlayerNames));
+                this.OnPropertyChanged(nameof(SubmittedAnswers));
             }
         }
 
@@ -69,7 +69,7 @@ namespace QuizGame.Model
         {
             if (playerName == null || this.CurrentQuestion == null) return false;
             this.SubmittedAnswers[playerName][this.CurrentQuestion] = answerIndex;
-            this.OnPropertyChanged(() => this.SubmittedAnswers);
+            this.OnPropertyChanged(nameof(SubmittedAnswers));
             return true;
         }
 
@@ -91,9 +91,9 @@ namespace QuizGame.Model
             // when the current question goes to null so it can update its UI state.
             this.NewQuestionAvailable(this, new QuestionEventArgs { Question = this.CurrentQuestion });
 
-            this.OnPropertyChanged(() => this.CurrentQuestion);
-            this.OnPropertyChanged(() => this.IsGameOver);
-            this.OnPropertyChanged(() => this.Winner);
+            this.OnPropertyChanged(nameof(CurrentQuestion));
+            this.OnPropertyChanged(nameof(IsGameOver));
+            this.OnPropertyChanged(nameof(Winner));
         }
 
         public Dictionary<string, int> GetResults()

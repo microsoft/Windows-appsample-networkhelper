@@ -29,9 +29,8 @@ THE SOFTWARE.
     xmlns:View="using:QuizGame.View" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
-    <View:ClientView/>
+    <View:ClientView x:Name="ClientView"/>
 
 </Page>

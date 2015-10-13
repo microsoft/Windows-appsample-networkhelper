@@ -23,7 +23,7 @@ THE SOFTWARE.
 -->
 
 <UserControl
-    x:Class="QuizGame.View.ClientView"
+    x:Class="QuizGame.View.ClientView" x:Name="View"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:QuizGame.View"
@@ -36,7 +36,6 @@ THE SOFTWARE.
     <UserControl.Resources>
         <Style x:Key="OptionButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="{x:Null}"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="Margin" Value="6"/>
@@ -47,7 +46,7 @@ THE SOFTWARE.
         </Style>
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -63,7 +62,9 @@ THE SOFTWARE.
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
             <StackPanel Visibility="{x:Bind ViewModel.JoinVisibility, Mode=OneWay}" Margin="50,0">
                 <TextBlock Text="This name is already taken, please choose another." TextWrapping="WrapWholeWords" Visibility="{x:Bind ViewModel.ErrorMessageVisibility, Mode=OneWay}" Foreground="Red" FontSize="18" />
-                <TextBox Text="{x:Bind ViewModel.PlayerName, Mode=TwoWay}" Margin="15" Header="Player name" FontSize="18"/>
+                <!-- For the text box, use Binding instead of x:Bind in order to use UpdateSourceTrigger,
+                     which enables the Join button as soon as the player starts entering a name. -->
+                <TextBox Text="{Binding ViewModel.PlayerName, ElementName=View, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="15" Header="Player name" FontSize="18"/>
                 <Button Content="Join game" Command="{x:Bind ViewModel.JoinGameCommand}" Style="{StaticResource CommandButtonStyle}"/>
             </StackPanel>
             <StackPanel>

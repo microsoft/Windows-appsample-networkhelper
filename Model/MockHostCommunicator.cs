@@ -31,14 +31,14 @@ namespace QuizGame.Model
     public class MockHostCommunicator : IHostCommunicator
     {
         internal MockClientCommunicator Client1 { get; set; }
-		internal MockClientCommunicator Client2 { get; set; }
+        internal MockClientCommunicator Client2 { get; set; }
 
         private List<string> clientList = new List<string>();
 
         public async Task EnterLobby()
         {
             // Simulate a periodic broadcast. Loops until the ClientViewModel adds a handler to the GameAvailable event. 
-			while (!this.Client1.OnGameAvailable() || !this.Client2.OnGameAvailable()) { await Task.Delay(100); }
+            while (!this.Client1.OnGameAvailable() || !this.Client2.OnGameAvailable()) { await Task.Delay(100); }
         }
 
         public void LeaveLobby()
@@ -46,11 +46,12 @@ namespace QuizGame.Model
             // No need to do anything in the mock version.
         }
 
-        public async Task SendQuestion(Question question)
+        public Task SendQuestion(Question question)
         {
             this.Client1.OnNewQuestionAvailable(question);
-			this.Client2.OnNewQuestionAvailable(question);
-		}
+            this.Client2.OnNewQuestionAvailable(question);
+            return Task.CompletedTask;
+        }
 
         public event EventHandler<PlayerEventArgs> PlayerJoined = delegate { };
 

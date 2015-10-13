@@ -23,30 +23,18 @@
 //  ---------------------------------------------------------------------------------
 
 using QuizGame.ViewModel;
-using QuizGameHost;
 using Windows.UI.Xaml.Controls;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace QuizGame
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class TestView : Page
     {
         public TestView()
         {
             this.InitializeComponent();
-            this.Loading += TestView_Loading;
-        }
-
-        private void TestView_Loading(Windows.UI.Xaml.FrameworkElement sender, object args)
-        {
-            this.hostView.ViewModel = App.HostViewModel;
 #if LOCALTESTMODEON
-            this.clientView.ViewModel = App.ClientViewModel;
-            this.clientView2.ViewModel = App.ClientViewModel2;
+            this.ClientView.ViewModel = ViewModelLocator.ClientViewModel;
+            this.ClientView2.ViewModel = ViewModelLocator.ClientViewModel2;
 #endif
         }
     }
