@@ -30,12 +30,12 @@ namespace QuizGame.Model
     public interface IHostCommunicator
     {
         // start broadcasting, accepting players
-        Task EnterLobby();
+        Task EnterLobbyAsync();
 
         // stop broadcasting, stop accepting players
         void LeaveLobby();
 
-        Task SendQuestion(Question question);
+        Task SendQuestionAsync(Question question);
 
         // sender = this, args = PlayerEventArgs
         event EventHandler<PlayerEventArgs> PlayerJoined;

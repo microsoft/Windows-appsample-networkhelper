@@ -76,7 +76,7 @@ namespace QuizGame.ViewModel
                     this.NextButtonText = "Show results";
                 }
             };
-            this.Game.NewQuestionAvailable += (s, e) => this.HostCommunicator.SendQuestion(e.Question);
+            this.Game.NewQuestionAvailable += (s, e) => this.HostCommunicator.SendQuestionAsync(e.Question);
             this.NextButtonText = "Next question";
 
             Func<DispatchedHandler, Task> callOnUiThread = async (handler) => await
@@ -90,7 +90,7 @@ namespace QuizGame.ViewModel
             this.HostCommunicator.AnswerReceived += async (s, e) =>
                 await callOnUiThread(() => this.Game.SubmitAnswer(e.PlayerName, e.AnswerIndex));
 
-            this.HostCommunicator.EnterLobby();
+            this.HostCommunicator.EnterLobbyAsync();
         }
 
         public DelegateCommand StartGameCommand
@@ -129,13 +129,11 @@ namespace QuizGame.ViewModel
         {
             get
             {
-                return this.endGameCommand ?? (this.endGameCommand = new DelegateCommand(
-              () =>
-              {
-                  this.GameState = GameState.Lobby;
-                  this.NextButtonText = "Next question";
-              },
-              () => this.GameState == GameState.Results));
+                return this.endGameCommand ?? (this.endGameCommand = new DelegateCommand(() =>
+                {
+                    this.GameState = GameState.Lobby;
+                    this.NextButtonText = "Next question";
+                }, () => this.GameState == GameState.Results));
             }
         }
         private DelegateCommand endGameCommand;
@@ -163,32 +161,28 @@ namespace QuizGame.ViewModel
         {
             get
             {
-                return
-this.GameState == GameState.Lobby ? Visibility.Visible : Visibility.Collapsed;
+                return this.GameState == GameState.Lobby ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public Visibility GameUnderwayVisibility
         {
             get
             {
-                return
-this.GameState == GameState.GameUnderway ? Visibility.Visible : Visibility.Collapsed;
+                return this.GameState == GameState.GameUnderway ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public Visibility ResultsVisibility
         {
             get
             {
-                return
-this.GameState == GameState.Results ? Visibility.Visible : Visibility.Collapsed;
+                return this.GameState == GameState.Results ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public string CurrentQuestionText
         {
             get
             {
-                return
-this.Game.CurrentQuestion == null ? String.Empty : this.Game.CurrentQuestion.Text;
+                return this.Game.CurrentQuestion == null ? String.Empty : this.Game.CurrentQuestion.Text;
             }
         }
 
@@ -226,8 +220,8 @@ this.Game.CurrentQuestion == null ? String.Empty : this.Game.CurrentQuestion.Tex
         {
             get
             {
-                return this.Game.GetResults().Select(kvp =>
-              new PlayerResult { Name = kvp.Key, Score = kvp.Value }).ToList<object>();
+                return this.Game.GetResults().Select(
+                    kvp => new PlayerResult { Name = kvp.Key, Score = kvp.Value }).ToList<object>();
             }
         }
 

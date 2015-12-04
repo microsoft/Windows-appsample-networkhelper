@@ -35,7 +35,7 @@ namespace QuizGame.Model
 
         private List<string> clientList = new List<string>();
 
-        public async Task EnterLobby()
+        public async Task EnterLobbyAsync()
         {
             // Simulate a periodic broadcast. Loops until the ClientViewModel adds a handler to the GameAvailable event. 
             while (!this.Client1.OnGameAvailable() || !this.Client2.OnGameAvailable()) { await Task.Delay(100); }
@@ -46,7 +46,7 @@ namespace QuizGame.Model
             // No need to do anything in the mock version.
         }
 
-        public Task SendQuestion(Question question)
+        public Task SendQuestionAsync(Question question)
         {
             this.Client1.OnNewQuestionAvailable(question);
             this.Client2.OnNewQuestionAvailable(question);

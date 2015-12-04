@@ -29,16 +29,16 @@ namespace QuizGame.Model
 {
     public interface IClientCommunicator
     {
-        void Initialize();
+        Task InitializeAsync();
         
         // Adds the specified player to the current game.
-        void JoinGame(string playerName);
+        Task JoinGameAsync(string playerName);
 
         // Removes the specified player from the current game.
-        void LeaveGame(string playerName);
+        Task LeaveGameAsync(string playerName);
 
         // Submits an answer to the current question.
-        void AnswerQuestion(string playerName, int option);
+        Task AnswerQuestionAsync(string playerName, int option);
 
         // Occurs when a game is available for joining. 
         event EventHandler GameAvailable;

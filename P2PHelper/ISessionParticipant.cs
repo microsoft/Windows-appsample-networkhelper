@@ -22,30 +22,50 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace QuizGame.Model
+namespace P2PHelper
 {
-    
-    public class HostMessage
+    public interface ISessionParticipant
     {
-        public HostMessageType Type { get; set; }
-        public bool IsJoined { get; set; }
-        public Question Question { get; set; }
+        /// <summary>
+        /// An event indicating that a manager has been found.
+        /// </summary>
+        event EventHandler<ManagerFoundEventArgs> ManagerFound;
+
+        /// <summary>
+        /// Start listening for managers.
+        /// </summary>
+        Task<bool> StartListeningAsync();
+
+        /// <summary>
+        /// Stop listening for managers.
+        /// </summary>
+        bool StopListening();
+
+        /// <summary>
+        /// Connect to a manager that has already been found.
+        /// </summary>
+        Task ConnectToManagerAsync(Guid manager);
+
+        /// <summary>
+        /// Creates and returns an ICommunicationChannel object so that app developers can have direct communication with the manager and send custom messages.
+        /// </summary>
+        ICommunicationChannel CreateCommunicationChannel(Guid manager);
+        
+        /// <summary>
+        /// Removes a manager from the list of available managers.
+        /// </summary>
+        bool RemoveManager(Guid manager);
     }
 
-    
-    public enum HostMessageType
+    public class ManagerFoundEventArgs
     {
-        Question,
-        JoinStatus
-    };
-
-    public class Question
-    {
-        public string Text { get; set; }
-        public List<string> Options { get; set; }
-        public int CorrectAnswerIndex { get; set; }
+        public Guid Id { get; set; }
+        public string Message { get; set; }
     }
 }

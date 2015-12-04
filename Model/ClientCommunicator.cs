@@ -24,6 +24,9 @@
 
 using P2PHelper;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuizGame.Model
 {
@@ -32,55 +35,127 @@ namespace QuizGame.Model
     /// </summary>
     public sealed class ClientCommunicator : IClientCommunicator
     {
+        /// <summary>
+        /// The string literal for the question command.
+        /// </summary>
+        private const string QUESTION_COMMAND = "question";
+
+        /// <summary>
+        /// The string literal for the join command.
+        /// </summary>
+        private const string JOIN_COMMAND = "join";
+
+        /// <summary>
+        /// The string literal for the answer command.
+        /// </summary>
+        private const string ANSWER_COMMAND = "answer";
+
+        /// <summary>
+        /// The string literal for a leave command.
+        /// </summary>
+        private const string LEAVE_COMMAND = "leave";
+
+        /// <summary>
+        /// Represents the participant.
+        /// </summary>
+        private SessionParticipant _participant;
+
+        /// <summary>
+        /// The communication channel to listen for messages from the game host.
+        /// </summary>
+        private ICommunicationChannel _participantCommunicationChannel;
+
+        /// <summary>
+        /// The communication channel to send messages to the game host.
+        /// </summary>
+        private ICommunicationChannel _managerCommunicationChannel;
+
+        /// <summary>
+        /// The guid of the connected game host.
+        /// </summary>
+        private Guid _managerGuid;
+
         public event EventHandler GameAvailable = delegate { };
+
         public event EventHandler<QuestionEventArgs> NewQuestionAvailable = delegate { };
+
         public event EventHandler<HostJoinStatusMessageReceivedArgs> HostJoinStatusMessageReceived = delegate { };
 
-        private P2PSessionClient Client { get; set; }
-
-        public ClientCommunicator(P2PSessionClient client)
+        public ClientCommunicator()
         {
-            this.Client = client;
-            this.Client.HostAvailable += (s, e) => this.GameAvailable(this, EventArgs.Empty);
-            this.Client.MessageReceived += ((s, e) =>
+            this._participant = new UdpParticipant();
+            this._participant.ManagerFound += ((sender, e) =>
             {
-                HostMessage hostMessage = e.DeserializedMessage<HostMessage>();
+                // Found a game host.
+                this._managerCommunicationChannel = _participant.CreateCommunicationChannel(e.Id);
+                this._managerGuid = e.Id;
+                this.GameAvailable(this, EventArgs.Empty);
 
-                switch(hostMessage.MessageType)
+            });
+
+
+            this._participantCommunicationChannel = new TcpCommunicationChannel();
+            this._participantCommunicationChannel.MessageReceived += ((sender, e) =>
+            {
+                // Decode the message that the game host sent to us.
+                string[] message = e.Message.ToString().Split('-');
+                switch (message[0])
                 {
-                    case HostMessageType.JoinStatus:
-                        this.HostJoinStatusMessageReceived(this, 
-                            new HostJoinStatusMessageReceivedArgs { IsJoined = hostMessage.IsJoined });
+                    case QUESTION_COMMAND: // The game host sent a question to us.
+                        NewQuestionAvailable(this,
+                            new QuestionEventArgs { Question = ParseQuestion(e.Message.ToString()) });
                         break;
-                    case HostMessageType.Question:
-                        this.NewQuestionAvailable(this,
-                            new QuestionEventArgs { Question = hostMessage.Question});
+                    case JOIN_COMMAND: // The game host sent a confirmation that we are connected.
+                        this.HostJoinStatusMessageReceived(this,
+                            new HostJoinStatusMessageReceivedArgs { IsJoined = Boolean.Parse(message[1]) });
                         break;
                 }
             });
         }
 
-        public async void Initialize() 
-        { 
-            await this.Client.ListenForP2PSession(P2PSession.SessionType.LocalNetwork); 
+        public async Task InitializeAsync() 
+        {
+            // Start listening for UDP advertisers.
+            await this._participant.StartListeningAsync();
+
+            // Start listening for TCP communications.
+            await this._participantCommunicationChannel.StartListeningAsync();
         }
 
-        public async void JoinGame(string playerName)
+        public async Task JoinGameAsync(string playerName)
         {
-            await Client.SendMessage(new HostCommandData { 
-                PlayerName = playerName, Command = Command.Join }, typeof(HostCommandData));
+            this._participant.ListenerMessage = playerName;
+
+            await this._participant.ConnectToManagerAsync(_managerGuid);
         }
 
-        public async void LeaveGame(string playerName)
+        public async Task LeaveGameAsync(string playerName)
         {
-            await Client.SendMessage(new HostCommandData {
-                PlayerName = playerName, Command = Command.Leave }, typeof(HostCommandData));
+            await this._managerCommunicationChannel
+                .SendRemoteMessageAsync($"{LEAVE_COMMAND}-{playerName}");
+
+            this._participant.RemoveManager(_managerGuid);
         }
 
-        public async void AnswerQuestion(string playerName, int option)
+        public async Task AnswerQuestionAsync(string playerName, int option)
         {
-            await Client.SendMessage(new HostCommandData { 
-                PlayerName = playerName, Command = Command.Answer, Data = option }, typeof(HostCommandData));
+            await this._managerCommunicationChannel
+                .SendRemoteMessageAsync($"{ANSWER_COMMAND}-{playerName}-{option}");
+        }
+
+        /// <summary>
+        /// Parses the question string that was received from the game host.
+        /// </summary>
+        private static Question ParseQuestion(string question)
+        {
+            string[] message = question.Split('-');
+
+            return new Question
+            {
+                Text = message[1],
+                Options = new List<string>(message.Skip(4)),
+                CorrectAnswerIndex = int.Parse(message[2])
+            };
         }
 
     }

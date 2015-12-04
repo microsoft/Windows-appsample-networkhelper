@@ -1,4 +1,4 @@
-# QuizGame sample
+ï»¿# QuizGame sample
 
 **QuizGame** is a Universal Windows Platform (UWP) app sample that explores the benefits of running the same app on multiple devices in direct communication with one-another. 
 
@@ -40,11 +40,21 @@ When local test mode is off, run the client and host apps on separate devices to
 
 ## Code at a glance
 
-If you’re just interested in code snippets for certain API and don’t want to browse or run the full sample, check out the following files for examples of some highlighted features:
+If youâ€™re just interested in code snippets for certain API and donâ€™t want to browse or run the full sample, check out the following files for examples of some highlighted features:
 
-* [P2PHelper project](P2PHelper) ([P2PSession.cs](P2PHelper/P2PSession.cs#L40), [P2PSessionClient.cs](P2PHelper/P2PSessionClient.cs#L31), and [P2PSessionHost.cs](P2PHelper/P2PSessionHost.cs#L36)):
-    - This is a generic peer-to-peer helper component that establishes and maintains communication channels. P2PHelper sends UDP broadcast messages on behalf of a host instance of the app, and establishes TCP connections between the host and multiple client instances of the app responding to the broadcast.
-    - You can use this library as-is in your projects, either directly, or through an adapter to keep it decoupled. (See the Communicator types below for an example of an adapter.)
+* [P2PHelper project](P2PHelper) ([ICommunicationChannel.cs](P2PHelper/ICommunicationChannel.cs#L33), [ISessionManager.cs](P2PHelper/ISessionManager.cs#L33), [ISessionParticipant.cs](P2PHelper/ISessionParticipant.cs#L33), [SessionManager.cs](P2PHelper/SessionManager.cs#L33), and [SessionParticipant.cs](P2PHelper/SessionParticipant.cs#L33)):
+    - These interfaces represent a generic peer-to-peer helper architecture that provides the framework for implementing various network protocols. 
+    - The ISessionManager interface and SessionManager abstract class define how a specific protocol can advertise itself to listening participants, manage connected participants, and provide direct communication to connected participants.
+    - The ISessionParticipant interface and SessionParticipant abstract class define how a specific protocol can listen for managers, establish a connection to a manager, and communicate directly with managers.
+    - The ICommunicationChannel interface defines how message are sent and received between managers and participants.
+
+* [P2PHelper project](P2PHelper) ([TcpCommunicationChannel.cs](P2PHelper/TcpCommunicationChannel.cs#L35), [UdpManager.cs](P2PHelper/UdpManager.cs#L37), and [UdpParticipant.cs](P2PHelper/UdpParticipant.cs#L37)):
+    - These classes are a concrete implementation of the interfaces and abstract classes described above for the TCP/UDP network protocol. 
+    - The UdpManager class broadcasts UDP messages to listening participants, listens for participant connection requests, and generates TcpCommunicationChannel objects for sending messages to connected participants.
+    - The UdpParticipant class listens for UDP messages broadcast by managers, sends UDP connection requests to managers, and generates TcpCommunicationChannel objects for sending messages to managers.
+    - The TcpCommunicationChannel class listens for TCP connections and sends TCP messages.
+    - You can use the P2PHelper library as-is in your projects, either directly, or through an adapter to keep it decoupled. (See the Communicator types below for an example of an adapter.)
+    
 * [BindableBase.cs](Common/BindableBase.cs#L37) and [DelegateCommand.cs](Common/DelegateCommand.cs#L55):
     - MVVM helper classes
     - Inherit from BindableBase to make your class observable (that is, give it an implementation of INotifyPropertyChanged)
@@ -54,7 +64,7 @@ If you’re just interested in code snippets for certain API and don’t want to bro
 * [IHostCommunicator.cs](Model/IHostCommunicator.cs#L30) and [IClientCommunicator.cs](Model/IClientCommunicator.cs#L30):
     - Interfaces that define the client-host communication protocol in terms of the game domain.
 * [HostCommunicator.cs](Model/HostCommunicator.cs#L37) and [ClientCommunicator.cs](Model/ClientCommunicator.cs#L33):
-    - Concrete implementations of the communicator interfaces that adapt game communication concepts to the P2PHelper API.  
+    - Concrete implementations of the communicator interfaces that adapt game communication concepts to the TCP/UDP P2PHelper API.  
 * [ClientView.xaml](View/ClientView.xaml#L25), [HostView.xaml](View/HostView.xaml#L25), and [TestView.xaml](View/TestView.xaml#L25): 
     - XAML views (visuals) for the client, host, and local test mode functionality, respectively
 * [ClientView.xaml.cs](View/ClientView.xaml.cs#L30), [HostView.xaml.cs](View/HostView.xaml.cs#L30), and [TestView.xaml.cs](View/TestView.xaml.cs#L30): 

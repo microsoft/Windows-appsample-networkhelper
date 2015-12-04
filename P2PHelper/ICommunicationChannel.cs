@@ -22,30 +22,39 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace QuizGame.Model
+namespace P2PHelper
 {
-    
-    public class HostMessage
+    public interface ICommunicationChannel
     {
-        public HostMessageType Type { get; set; }
-        public bool IsJoined { get; set; }
-        public Question Question { get; set; }
+        /// <summary>
+        /// An event handler that indicates a message was received.
+        /// </summary>
+        event EventHandler<MessageReceivedEventArgs> MessageReceived;
+
+        /// <summary>
+        /// Sends a message to the remote.
+        /// </summary>
+        Task SendRemoteMessageAsync(object message);
+
+        /// <summary>
+        /// Starts listening for messages.
+        /// </summary>
+        Task StartListeningAsync();
+
+        /// <summary>
+        /// Stops listening for messages.
+        /// </summary>
+        void StopListening();
     }
 
-    
-    public enum HostMessageType
+    public class MessageReceivedEventArgs : EventArgs
     {
-        Question,
-        JoinStatus
-    };
-
-    public class Question
-    {
-        public string Text { get; set; }
-        public List<string> Options { get; set; }
-        public int CorrectAnswerIndex { get; set; }
+        public object Message { get; set; }
     }
 }

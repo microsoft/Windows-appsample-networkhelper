@@ -23,6 +23,7 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 
 namespace QuizGame.Model
 {
@@ -30,24 +31,28 @@ namespace QuizGame.Model
     {
         internal MockHostCommunicator Host { get; set; }
 
-        public void JoinGame(string playerName)
+        public async Task JoinGameAsync(string playerName)
         {
             this.Host.OnPlayerJoined(this, playerName);
+            await Task.CompletedTask;
         }
 
-        public void Initialize()
+        public async Task InitializeAsync()
         {
             // No need to do anything in the mock version.
+            await Task.CompletedTask;
         }
         
-        public void LeaveGame(string playerName)
+        public async Task LeaveGameAsync(string playerName)
         {
             this.Host.OnPlayerDeparted(playerName);
+            await Task.CompletedTask;
         }
 
-        public void AnswerQuestion(string playerName, int answerIndex)
+        public async Task AnswerQuestionAsync(string playerName, int answerIndex)
         {
             this.Host.OnAnswerReceived(playerName, answerIndex);
+            await Task.CompletedTask;
         }
 
         public event EventHandler GameAvailable;

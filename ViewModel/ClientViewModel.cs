@@ -55,7 +55,7 @@ namespace QuizGame.ViewModel
                     this.IsJoined = e.IsJoined;
                     this.ErrorMessageVisibility = e.IsJoined ? Visibility.Collapsed : Visibility.Visible;
                 });
-            this.ClientCommunicator.Initialize();
+            this.ClientCommunicator.InitializeAsync();
         }
 
         public string StateName
@@ -151,7 +151,7 @@ namespace QuizGame.ViewModel
             get
             {
                 return this.joinGameCommand ?? (this.joinGameCommand = new DelegateCommand(
-                    () => this.ClientCommunicator.JoinGame(this.PlayerName), 
+                    () => this.ClientCommunicator.JoinGameAsync(this.PlayerName), 
                     () => this.CanJoin));
             }
         }
@@ -163,7 +163,7 @@ namespace QuizGame.ViewModel
             { 
                 return this.leaveGameCommand ?? (this.leaveGameCommand = new DelegateCommand(
                     () => {
-                        this.ClientCommunicator.LeaveGame(this.PlayerName);
+                        this.ClientCommunicator.LeaveGameAsync(this.PlayerName);
                         this.IsJoined = false;
                         this.CurrentQuestion = null;
                     })); 
@@ -177,7 +177,7 @@ namespace QuizGame.ViewModel
             { 
                 return this.answerQuestionCommand ?? (this.answerQuestionCommand = new DelegateCommand<string>(
                     option => {
-                        this.ClientCommunicator.AnswerQuestion(PlayerName, Int32.Parse(option));
+                        this.ClientCommunicator.AnswerQuestionAsync(PlayerName, Int32.Parse(option));
                         this.IsQuestionAnswered = true;
                         this.AnswerQuestionCommand.RaiseCanExecuteChanged();
                         this.StateName = "thank you";

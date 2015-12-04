@@ -47,14 +47,8 @@ namespace QuizGame.ViewModel
             mockHostCommunicator.Client1 = clientCommunicator as MockClientCommunicator;
             mockHostCommunicator.Client2 = clientCommunicator2 as MockClientCommunicator;
 #else
-            var config = new P2PSession.P2PSessionConfigurationData
-            {
-                multicastIP = "239.7.7.7",
-                multicastPort = "60608",
-                tcpPort = "4400"
-            };
-            clientCommunicator = new ClientCommunicator(new P2PSessionClient(config));
-            hostCommunicator = new HostCommunicator(new P2PSessionHost(config));
+            clientCommunicator = new ClientCommunicator();
+            hostCommunicator = new HostCommunicator();
 #endif
         }
 
@@ -87,7 +81,6 @@ namespace QuizGame.ViewModel
 #if LOCALTESTMODEON
                 var game = GetSampleGame();
 #else
-                // TODO get real game data when not testing and not in design mode
                 var game = DesignMode.DesignModeEnabled ? GetSampleGame() : GetSampleGame();
 #endif
                 return hostViewModel ?? (hostViewModel = new HostViewModel(game, hostCommunicator)

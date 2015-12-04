@@ -22,30 +22,47 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace QuizGame.Model
+namespace P2PHelper
 {
-    
-    public class HostMessage
+    public interface ISessionManager
     {
-        public HostMessageType Type { get; set; }
-        public bool IsJoined { get; set; }
-        public Question Question { get; set; }
+        /// <summary>
+        /// An event that indicates that a participant has been connected.
+        /// </summary>
+        event EventHandler<ParticipantConnectedEventArgs> ParticipantConnected;
+
+        /// <summary>
+        /// Start advertising. 
+        /// </summary>
+        Task<bool> StartAdvertisingAsync();
+
+        /// <summary>
+        /// Stop advertising.
+        /// </summary>
+        bool StopAdvertising();
+
+        /// <summary>
+        /// Creates an ICommunicationChannel object and returns it so that app developers can send custom messages to the participant.
+        /// </summary>
+        ICommunicationChannel CreateCommunicationChannel(Guid participant);
+
+        /// <summary>
+        /// Removes a participant from a participants list.
+        /// </summary>
+        bool RemoveParticipant(Guid participant);
     }
 
-    
-    public enum HostMessageType
+    public class ParticipantConnectedEventArgs : EventArgs
     {
-        Question,
-        JoinStatus
-    };
+        public Guid Id { get; set; }
 
-    public class Question
-    {
-        public string Text { get; set; }
-        public List<string> Options { get; set; }
-        public int CorrectAnswerIndex { get; set; }
+        public object Message { get; set; }
     }
 }
+    
