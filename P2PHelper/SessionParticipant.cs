@@ -23,9 +23,8 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace P2PHelper
@@ -33,14 +32,9 @@ namespace P2PHelper
     public abstract class SessionParticipant : ISessionParticipant
     {
         /// <summary>
-        /// The message that will be sent when connecting to a manager.
-        /// </summary>
-        public string ListenerMessage { get; set; }
-
-        /// <summary>
         /// The managers that are available.
         /// </summary>
-        public Dictionary<Guid, object> Managers { get; set; } = new Dictionary<Guid, object>();
+        public ConcurrentDictionary<Guid, object> Managers { get; set; } = new ConcurrentDictionary<Guid, object>();
 
         public event EventHandler<ManagerFoundEventArgs> ManagerFound = delegate { };
 
@@ -50,9 +44,13 @@ namespace P2PHelper
 
         public abstract Task ConnectToManagerAsync(Guid manager);
 
-        public abstract ICommunicationChannel CreateCommunicationChannel(Guid advertiser);
+        public abstract ICommunicationChannel CreateCommunicationChannel(Guid manager, int flags);
 
-        public bool RemoveManager(Guid manager) => Managers.Remove(manager);
+        public bool RemoveManager(Guid manager)
+        {
+            object obj;
+            return Managers.TryRemove(manager, out obj);
+        }
 
         /// <summary>
         /// Adds a manager to the AvailableManagers list.
@@ -64,10 +62,13 @@ namespace P2PHelper
             {
                 // Generate a new GUID, so that app developers can reference this particular manager.
                 var guid = Guid.NewGuid();
-                Managers.Add(guid, manager);
+                bool isAdded = Managers.TryAdd(guid, manager);
 
-                // Notify that ManagerFound handlers so the app developers are aware of a new Manager.
-                ManagerFound(this, new ManagerFoundEventArgs { Id = guid, Message = managerMessage });
+                if (isAdded)
+                {
+                    // Notify that ManagerFound handlers so the app developers are aware of a new Manager.
+                    ManagerFound(this, new ManagerFoundEventArgs { Id = guid, Message = managerMessage });
+                }
             }
         }
     }

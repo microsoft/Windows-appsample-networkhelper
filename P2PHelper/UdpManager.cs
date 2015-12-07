@@ -47,12 +47,14 @@ namespace P2PHelper
         private const string ADVERTISING_MESSAGE = "Advertiser";
 
         /// <summary>
-        /// The default port to use when advertising for UDP multicast messages.
+        /// The default port to use when advertising for UDP multicast messages. 
+        /// This port was chosen randomly in the ephemeral port range.
         /// </summary>
-        private const string UDP_COMMUNICATION_PORT = "1337";
+        private const string UDP_COMMUNICATION_PORT = "56788";
 
         /// <summary>
-        /// The default IP to use when advertising UDP multicast messages.
+        /// The default IP to use when advertising UDP multicast messages. 
+        /// This IP was chosen randomly as part of the multicast IP range.
         /// </summary>
         private const string UDP_MULTICAST_IP = "237.1.3.37";
 
@@ -126,7 +128,11 @@ namespace P2PHelper
             return status;
         }
 
-        public override ICommunicationChannel CreateCommunicationChannel(Guid participant)
+        /// <summary>
+        /// Creates a TcpCommunicationChannel object and returns it so that app developers can send custom TCP messages to the manager.
+        /// Returns a null remote host name in TcpCommunicationChannel object if the manager didn't exist.
+        /// </summary>
+        public override ICommunicationChannel CreateCommunicationChannel(Guid participant, int flags = 0)
         {
             TcpCommunicationChannel channel = new TcpCommunicationChannel();
             channel.RemoteHostname = (Participants[participant] as UdpParticipantInformation).Host;

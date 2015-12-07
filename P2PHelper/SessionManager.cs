@@ -40,7 +40,7 @@ namespace P2PHelper
 
         public abstract bool StopAdvertising();
 
-        public abstract ICommunicationChannel CreateCommunicationChannel(Guid participant);
+        public abstract ICommunicationChannel CreateCommunicationChannel(Guid participant, int flags);
 
         public bool RemoveParticipant(Guid subscriber) => Participants.Remove(subscriber);
 

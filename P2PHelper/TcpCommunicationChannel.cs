@@ -35,9 +35,10 @@ namespace P2PHelper
     public class TcpCommunicationChannel : ICommunicationChannel
     {
         /// <summary>
-        /// The default port.
+        /// The default port. 
+        /// This port was chosen randomly in the ephemeral port range.
         /// </summary>
-        private const string TCP_COMMUNICATION_PORT = "1338";
+        private const string TCP_COMMUNICATION_PORT = "56789";
 
         /// <summary>
         /// The socket connection to the remote TCP server.
@@ -87,9 +88,12 @@ namespace P2PHelper
         /// </summary>
         public async Task StartListeningAsync()
         {
-            _localSocket = _localSocket ?? new StreamSocketListener();
-            _localSocket.ConnectionReceived += LocalSocketConnectionReceived;
-            await _localSocket.BindServiceNameAsync(CommunicationPort);
+            if (_localSocket == null)
+            {
+                _localSocket = new StreamSocketListener();
+                _localSocket.ConnectionReceived += LocalSocketConnectionReceived;
+                await _localSocket.BindServiceNameAsync(CommunicationPort);
+            }   
         }
 
         /// <summary>

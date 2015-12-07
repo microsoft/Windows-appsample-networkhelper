@@ -64,7 +64,7 @@ namespace QuizGame.Model
         /// <summary>
         /// The manager that sends UDP advertisement messages and manages a list of participants.
         /// </summary>
-        private ISessionManager _manager = new UdpManager();
+        private ISessionManager _manager = new DnsSdManager();
 
         /// <summary>
         /// The list of communication channels to send messages to participants.

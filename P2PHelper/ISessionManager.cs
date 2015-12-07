@@ -50,7 +50,7 @@ namespace P2PHelper
         /// <summary>
         /// Creates an ICommunicationChannel object and returns it so that app developers can send custom messages to the participant.
         /// </summary>
-        ICommunicationChannel CreateCommunicationChannel(Guid participant);
+        ICommunicationChannel CreateCommunicationChannel(Guid participant, int flags = 0);
 
         /// <summary>
         /// Removes a participant from a participants list.

@@ -36,12 +36,14 @@ namespace P2PHelper
     public class UdpParticipant : SessionParticipant
     {
         /// <summary>
-        /// The default port to use when listening for UDP messages.
+        /// The default port to use when listening for UDP messages. 
+        /// This port was chosen randomly in the ephemeral port range.
         /// </summary>
-        private const string UDP_COMMUNICATION_PORT = "1337";
+        private const string UDP_COMMUNICATION_PORT = "56788";
 
         /// <summary>
-        /// The default IP to use when listening for multicast messages.
+        /// The default IP to use when listening for multicast messages. 
+        /// This IP was chosen randomly as part of the multicast IP range.
         /// </summary>
         private const string UDP_MULTICAST_IP = "237.1.3.37";
 
@@ -59,6 +61,11 @@ namespace P2PHelper
         /// The multicast group that the listener will be sending UDP messages to.
         /// </summary>
         public HostName ListenerGroupHost { get; set; } = new HostName(UDP_MULTICAST_IP);
+
+        /// <summary>
+        /// The message that will be sent when connecting to a manager.
+        /// </summary>
+        public String ListenerMessage { get; set; }
 
         /// <summary>
         /// Start listening.
@@ -118,7 +125,7 @@ namespace P2PHelper
         /// Creates a TcpCommunicationChannel object and returns it so that app developers can send custom TCP messages to the manager.
         /// Returns a null remote host name in TcpCommunicationChannel object if the manager didn't exist.
         /// </summary>
-        public override ICommunicationChannel CreateCommunicationChannel(Guid manager)
+        public override ICommunicationChannel CreateCommunicationChannel(Guid manager, int flags = 0)
         {
             var managerCast = Managers[manager] as UdpManagerInformation;
             return new TcpCommunicationChannel { RemoteHostname = managerCast == null ? null : managerCast.Host };

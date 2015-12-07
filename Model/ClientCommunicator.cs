@@ -58,7 +58,7 @@ namespace QuizGame.Model
         /// <summary>
         /// Represents the participant.
         /// </summary>
-        private SessionParticipant _participant;
+        private DnsSdParticipant _participant = new DnsSdParticipant();
 
         /// <summary>
         /// The communication channel to listen for messages from the game host.
@@ -83,16 +83,13 @@ namespace QuizGame.Model
 
         public ClientCommunicator()
         {
-            this._participant = new UdpParticipant();
             this._participant.ManagerFound += ((sender, e) =>
             {
                 // Found a game host.
                 this._managerCommunicationChannel = _participant.CreateCommunicationChannel(e.Id);
                 this._managerGuid = e.Id;
                 this.GameAvailable(this, EventArgs.Empty);
-
             });
-
 
             this._participantCommunicationChannel = new TcpCommunicationChannel();
             this._participantCommunicationChannel.MessageReceived += ((sender, e) =>
@@ -133,8 +130,6 @@ namespace QuizGame.Model
         {
             await this._managerCommunicationChannel
                 .SendRemoteMessageAsync($"{LEAVE_COMMAND}-{playerName}");
-
-            this._participant.RemoveManager(_managerGuid);
         }
 
         public async Task AnswerQuestionAsync(string playerName, int option)

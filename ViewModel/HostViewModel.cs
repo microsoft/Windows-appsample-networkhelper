@@ -103,6 +103,7 @@ namespace QuizGame.ViewModel
                         this.Game.StartGame();
                         this.OnQuestionChanged();
                         this.GameState = GameState.GameUnderway;
+                        this.HostCommunicator.LeaveLobby();
                     },
                     () => this.GameState == GameState.Lobby));
             }
@@ -129,8 +130,9 @@ namespace QuizGame.ViewModel
         {
             get
             {
-                return this.endGameCommand ?? (this.endGameCommand = new DelegateCommand(() =>
+                return this.endGameCommand ?? (this.endGameCommand = new DelegateCommand(async () =>
                 {
+                    await this.HostCommunicator.EnterLobbyAsync();
                     this.GameState = GameState.Lobby;
                     this.NextButtonText = "Next question";
                 }, () => this.GameState == GameState.Results));

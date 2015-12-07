@@ -55,7 +55,7 @@ namespace P2PHelper
         /// <summary>
         /// Creates and returns an ICommunicationChannel object so that app developers can have direct communication with the manager and send custom messages.
         /// </summary>
-        ICommunicationChannel CreateCommunicationChannel(Guid manager);
+        ICommunicationChannel CreateCommunicationChannel(Guid manager, int flags = 0);
         
         /// <summary>
         /// Removes a manager from the list of available managers.

@@ -113,13 +113,15 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DnsSdManager.cs" />
+    <Compile Include="DnsSdParticipant.cs" />
     <Compile Include="ICommunicationChannel.cs" />
     <Compile Include="ISessionManager.cs" />
     <Compile Include="ISessionParticipant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionManager.cs" />
     <Compile Include="SessionParticipant.cs" />
-    <Compile Include="TCPCommunicationChannel.cs" />
+    <Compile Include="TcpCommunicationChannel.cs" />
     <Compile Include="UdpManager.cs" />
     <Compile Include="UdpParticipant.cs" />
     <Content Include="Properties\P2PHelper.rd.xml" />
