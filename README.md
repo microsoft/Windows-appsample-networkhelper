@@ -48,7 +48,7 @@ If you’re just interested in code snippets for certain API and don’t want to
     - The ISessionParticipant interface and SessionParticipant abstract class define how a specific protocol can listen for managers, establish a connection to a manager, and communicate directly with managers.
     - The ICommunicationChannel interface defines how message are sent and received between managers and participants.
 
-* [P2PHelper project](P2PHelper) ([TcpCommunicationChannel.cs](P2PHelper/TcpCommunicationChannel.cs#L35), [UdpManager.cs](P2PHelper/UdpManager.cs#L37), and [UdpParticipant.cs](P2PHelper/UdpParticipant.cs#L37)):
+* [P2PHelper project](P2PHelper) ([TCPCommunicationChannel.cs](P2PHelper/TCPCommunicationChannel.cs#L35), [UdpManager.cs](P2PHelper/UdpManager.cs#L37), and [UdpParticipant.cs](P2PHelper/UdpParticipant.cs#L37)):
     - These classes are a concrete implementation of the interfaces and abstract classes described above for the TCP/UDP network protocol. 
     - The UdpManager class broadcasts UDP messages to listening participants, listens for participant connection requests, and generates TcpCommunicationChannel objects for sending messages to connected participants.
     - The UdpParticipant class listens for UDP messages broadcast by managers, sends UDP connection requests to managers, and generates TcpCommunicationChannel objects for sending messages to managers.
