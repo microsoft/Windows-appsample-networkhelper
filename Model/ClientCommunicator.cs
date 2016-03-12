@@ -36,29 +36,9 @@ namespace QuizGame.Model
     public sealed class ClientCommunicator : IClientCommunicator
     {
         /// <summary>
-        /// The string literal for the question command.
-        /// </summary>
-        private const string QUESTION_COMMAND = "question";
-
-        /// <summary>
-        /// The string literal for the join command.
-        /// </summary>
-        private const string JOIN_COMMAND = "join";
-
-        /// <summary>
-        /// The string literal for the answer command.
-        /// </summary>
-        private const string ANSWER_COMMAND = "answer";
-
-        /// <summary>
-        /// The string literal for a leave command.
-        /// </summary>
-        private const string LEAVE_COMMAND = "leave";
-
-        /// <summary>
         /// Represents the participant.
         /// </summary>
-        private DnsSdParticipant _participant = new DnsSdParticipant();
+        private UdpParticipant _participant = new UdpParticipant();
 
         /// <summary>
         /// The communication channel to listen for messages from the game host.
@@ -79,7 +59,7 @@ namespace QuizGame.Model
 
         public event EventHandler<QuestionEventArgs> NewQuestionAvailable = delegate { };
 
-        public event EventHandler<HostJoinStatusMessageReceivedArgs> HostJoinStatusMessageReceived = delegate { };
+        public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
 
         public ClientCommunicator()
         {
@@ -94,64 +74,55 @@ namespace QuizGame.Model
             this._participantCommunicationChannel = new TcpCommunicationChannel();
             this._participantCommunicationChannel.MessageReceived += ((sender, e) =>
             {
-                // Decode the message that the game host sent to us.
-                string[] message = e.Message.ToString().Split('-');
-                switch (message[0])
-                {
-                    case QUESTION_COMMAND: // The game host sent a question to us.
-                        NewQuestionAvailable(this,
-                            new QuestionEventArgs { Question = ParseQuestion(e.Message.ToString()) });
-                        break;
-                    case JOIN_COMMAND: // The game host sent a confirmation that we are connected.
-                        this.HostJoinStatusMessageReceived(this,
-                            new HostJoinStatusMessageReceivedArgs { IsJoined = Boolean.Parse(message[1]) });
-                        break;
-                }
+                object message = new Question();
+                e.GetDeserializedMessage(ref message);
+
+                NewQuestionAvailable(this,
+                    new QuestionEventArgs { Question = message as Question });
             });
         }
 
-        public async Task InitializeAsync() 
+        public async Task InitializeAsync()
         {
             // Start listening for UDP advertisers.
             await this._participant.StartListeningAsync();
 
-            // Start listening for TCP communications.
+            // Start listening for TCP messages.
             await this._participantCommunicationChannel.StartListeningAsync();
         }
 
         public async Task JoinGameAsync(string playerName)
         {
             this._participant.ListenerMessage = playerName;
-
             await this._participant.ConnectToManagerAsync(_managerGuid);
+
+            // Alert the ViewModel that the player has joined the game successfully.
+            PlayerJoined(this, new PlayerJoinedEventArgs() { IsJoined = true });
         }
 
         public async Task LeaveGameAsync(string playerName)
         {
+            HostCommand command = new HostCommand()
+            {
+                Command = Command.Leave,
+                PlayerName = playerName
+            };
+
             await this._managerCommunicationChannel
-                .SendRemoteMessageAsync($"{LEAVE_COMMAND}-{playerName}");
+                .SendRemoteMessageAsync(command);
         }
 
         public async Task AnswerQuestionAsync(string playerName, int option)
         {
-            await this._managerCommunicationChannel
-                .SendRemoteMessageAsync($"{ANSWER_COMMAND}-{playerName}-{option}");
-        }
-
-        /// <summary>
-        /// Parses the question string that was received from the game host.
-        /// </summary>
-        private static Question ParseQuestion(string question)
-        {
-            string[] message = question.Split('-');
-
-            return new Question
+            HostCommand command = new HostCommand()
             {
-                Text = message[1],
-                Options = new List<string>(message.Skip(4)),
-                CorrectAnswerIndex = int.Parse(message[2])
+                Command = Command.Answer,
+                PlayerName = playerName,
+                QuestionAnswer = option
             };
-        }
 
+            await this._managerCommunicationChannel
+                .SendRemoteMessageAsync(command);
+        }
     }
 }

@@ -47,6 +47,6 @@ namespace QuizGame.Model
         event EventHandler<QuestionEventArgs> NewQuestionAvailable;
 
         // Occurs when the server has received a join request and either acknowledges it, or denies it contingent on uniqueness of client name.
-        event EventHandler<HostJoinStatusMessageReceivedArgs> HostJoinStatusMessageReceived;
+        event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
     }
 }

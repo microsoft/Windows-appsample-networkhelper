@@ -69,7 +69,7 @@ namespace QuizGame.Model
         }
 
         public event EventHandler<QuestionEventArgs> NewQuestionAvailable = delegate { };
-        public event EventHandler<HostJoinStatusMessageReceivedArgs> HostJoinStatusMessageReceived;
+        public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
 
         internal void OnNewQuestionAvailable(Question newQuestion)
         {
@@ -78,7 +78,7 @@ namespace QuizGame.Model
 
         internal void OnHostJoinStatusMessageReceived(bool isJoined)
         {
-            this.HostJoinStatusMessageReceived(this, new HostJoinStatusMessageReceivedArgs { IsJoined = isJoined });
+            this.PlayerJoined(this, new PlayerJoinedEventArgs { IsJoined = isJoined });
         }
     }
 }

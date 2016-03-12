@@ -37,26 +37,6 @@ namespace QuizGame.Model
     public sealed class HostCommunicator : IHostCommunicator
     {
         /// <summary>
-        /// The string literal for the question command.
-        /// </summary>
-        private const string QUESTION_COMMAND = "question";
-
-        /// <summary>
-        /// The string literal for the join command.
-        /// </summary>
-        private const string JOIN_COMMAND = "join";
-
-        /// <summary>
-        /// The string literal for the answer command.
-        /// </summary>
-        private const string ANSWER_COMMAND = "answer";
-
-        /// <summary>
-        /// The string literal for a leave command.
-        /// </summary>
-        private const string LEAVE_COMMAND = "leave";
-
-        /// <summary>
         /// Maps the player names to their guids.
         /// </summary>
         private Dictionary<string, Guid> _playerToParticipantMap = new Dictionary<string, Guid>();
@@ -64,7 +44,7 @@ namespace QuizGame.Model
         /// <summary>
         /// The manager that sends UDP advertisement messages and manages a list of participants.
         /// </summary>
-        private ISessionManager _manager = new DnsSdManager();
+        private ISessionManager _manager = new UdpManager();
 
         /// <summary>
         /// The list of communication channels to send messages to participants.
@@ -89,10 +69,10 @@ namespace QuizGame.Model
                 // A player has joined the game.
                 _participantCommunicationChannels.Add(_manager.CreateCommunicationChannel(e.Id));
 
-                HostCommandData data = new HostCommandData
+                HostCommand data = new HostCommand
                 {
                     PlayerName = e.Message.ToString(),
-                    Data = null,
+                    QuestionAnswer = 0,
                     Command = Command.Join
                 };
 
@@ -101,42 +81,39 @@ namespace QuizGame.Model
 
             _managerCommunicationChannel.MessageReceived += ((sender, e) =>
             {
-                // Decode the message. The command of the message is the first phrase before a '-' character.
-                string[] message = e.Message.ToString().Split('-');
-                switch (message[0])
-                {
-                    case LEAVE_COMMAND: // The participant sent a message to leave the game.
-                        OnPlayerDeparted(
-                            new HostCommandData {
-                                PlayerName = message[1],
-                                Command = Command.Leave, }, 
-                            _playerToParticipantMap[message[1]]);
-                        break;
-                    case ANSWER_COMMAND: // The participant sent a message to answer a question.
-                        OnAnswerReceived(
-                            new HostCommandData {
-                                PlayerName = message[1],
-                                Command = Command.Answer,
-                                Data = int.Parse(message[2]) }, 
-                            _playerToParticipantMap[message[1]]);
-                        break;
-                }
+                // De serialize the message and put it in a command variable.
+                object data = new HostCommand();
+                e.GetDeserializedMessage(ref data);
+                var command = data as HostCommand;
+
+                // Place the indicated actions in an array, so we can index them based on the Command enum value.
+                Action[] actions = new Action[]{
+                    // Do nothing if Command == Join, because we already do this on ParticipantConnected.
+                    () => { },
+                    // if Command == Leave
+                    () => {OnPlayerDeparted(command, _playerToParticipantMap[command.PlayerName]); },
+                    // if Command == Answer
+                    () => {OnAnswerReceived(command, _playerToParticipantMap[command.PlayerName]); }
+                };
+
+                // Index the array from the Command and call the associated Action lambda.
+                actions[(int)command.Command]();
             });
         }
 
-        public void OnPlayerDeparted(HostCommandData commandData, Guid guid)
+        public void OnPlayerDeparted(HostCommand commandData, Guid guid)
         {
             PlayerDeparted(this, new PlayerEventArgs { PlayerName = commandData.PlayerName });
             _manager.RemoveParticipant(guid);
             _playerToParticipantMap.Remove(commandData.PlayerName);
         }
 
-        public void OnAnswerReceived(HostCommandData commandData, Guid guid)
+        public void OnAnswerReceived(HostCommand commandData, Guid guid)
         {
             AnswerReceived(this, new AnswerReceivedEventArgs
             {
                 PlayerName = commandData.PlayerName,
-                AnswerIndex = (int)commandData.Data
+                AnswerIndex = (int)commandData.QuestionAnswer
             });
         }
 
@@ -153,27 +130,16 @@ namespace QuizGame.Model
             var clientList = new List<Guid>();
             clientList.AddRange(_playerToParticipantMap.Values);
 
-            string message = 
-                $"{QUESTION_COMMAND}-{question.Text}-{question.CorrectAnswerIndex}-{question.Options.Count}" +
-                $"-{string.Join("-",question.Options)}";
-
             var messageTasks = clientList.Select(client =>
-                _manager.CreateCommunicationChannel(client).SendRemoteMessageAsync(message));
+                _manager.CreateCommunicationChannel(client).SendRemoteMessageAsync(question));
 
             await Task.WhenAll(messageTasks);
         }
 
         /// <summary>
-        /// Sends a message back to the participant, indicating that whether have successfully added them to our list of participants.
+        /// When a message is received from the participant, this method will attempt to add the participant.
         /// </summary>
-        private async Task SendJoinStatusMessageToPlayerAsync(Guid playerId, bool isJoined) => 
-            await _manager.CreateCommunicationChannel(playerId).SendRemoteMessageAsync($"{JOIN_COMMAND}-{isJoined}");
-
-        /// <summary>
-        /// When a message is received from the participant, this method will attempt to add the participant and send a join status message 
-        /// back indicating whether the participant was added successfully.
-        /// </summary>
-        private async Task OnPlayerJoinedAsync(HostCommandData commandData, Guid guid)
+        private async Task OnPlayerJoinedAsync(HostCommand commandData, Guid guid)
         {
             Guid duplicatePlayerID;
 
@@ -181,11 +147,6 @@ namespace QuizGame.Model
             {
                 _playerToParticipantMap.Add(commandData.PlayerName, guid);
                 PlayerJoined(this, new PlayerEventArgs { PlayerName = commandData.PlayerName });
-                await SendJoinStatusMessageToPlayerAsync(guid, true);
-            }
-            else
-            {
-                await SendJoinStatusMessageToPlayerAsync(guid, false);
             }
         }
 

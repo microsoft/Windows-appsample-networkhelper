@@ -49,7 +49,7 @@ namespace QuizGame.ViewModel
                 await callOnUiThread(() => this.CanJoin = true); 
             this.ClientCommunicator.NewQuestionAvailable += async (s, e) => 
                 await callOnUiThread(() => this.CurrentQuestion = e.Question);
-            this.ClientCommunicator.HostJoinStatusMessageReceived += async (s, e) =>
+            this.ClientCommunicator.PlayerJoined += async (s, e) =>
                 await callOnUiThread(() => 
                 {
                     this.IsJoined = e.IsJoined;

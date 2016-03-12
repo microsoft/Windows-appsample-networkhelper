@@ -26,9 +26,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Background;
 using Windows.Networking.Sockets;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml;
 
 namespace P2PHelper
 {
@@ -63,19 +67,26 @@ namespace P2PHelper
         /// <summary>
         /// An event indicating that a message was received from the remote TCP server.
         /// </summary>
-        public event EventHandler<MessageReceivedEventArgs> MessageReceived = delegate { };
+        public event EventHandler<IMessageReceivedEventArgs> MessageReceived = delegate { };
 
         /// <summary>
-        /// Sends a message to the connected RemoteSocket.
+        /// Serializes the data object and sends it to the connected RemoteSocket.
+        /// For more information on making an object serializable, see DataContractJsonSerializer.
         /// </summary>
-        public async Task SendRemoteMessageAsync(object message)
+        public async Task SendRemoteMessageAsync(object data)
         {
             // Connect to the remote host to ensure that the connection exists.
             await ConnectToRemoteAsync();
 
-            using (var writer = new StreamWriter(_remoteSocket.OutputStream.AsStreamForWrite()))
+            using (var writer = new DataWriter(_remoteSocket.OutputStream))
             {
-                await writer.WriteLineAsync(message.ToString());
+                byte[] serializedData = SerializeData(data);
+                byte[] serializedDataLength = BitConverter.GetBytes(serializedData.Length);
+
+                writer.WriteBytes(serializedDataLength);
+                writer.WriteBytes(serializedData);
+
+                await writer.StoreAsync();
                 await writer.FlushAsync();
             }
 
@@ -85,30 +96,42 @@ namespace P2PHelper
 
         /// <summary>
         /// Creates a TCP socket and binds to the CommunicationPort.
+        /// Use the default JsonSerializer if null is passed into the serializer parameter.
+        /// Returns false if you are already listening.
         /// </summary>
-        public async Task StartListeningAsync()
+        public async Task<bool> StartListeningAsync()
         {
+            bool status = false;
+
             if (_localSocket == null)
             {
                 _localSocket = new StreamSocketListener();
                 _localSocket.ConnectionReceived += LocalSocketConnectionReceived;
                 await _localSocket.BindServiceNameAsync(CommunicationPort);
-            }   
+                status = true;
+            }
+
+            return status;
         }
 
         /// <summary>
-        /// Disposes of the TCP socket and sets it to null.
+        /// Disposes of the TCP socket and sets it to null. Returns false if 
+        /// you weren't listening.
         /// </summary>
-        public void StopListening()
+        public async Task<bool> StopListening()
         {
-            if (_localSocket == null)
+            bool status = false;
+
+            if (_localSocket != null)
             {
-                throw new InvalidOperationException("The TCP Socket is not listening for connections");
+                await _localSocket.CancelIOAsync();
+                _localSocket.ConnectionReceived -= LocalSocketConnectionReceived;
+                _localSocket.Dispose();
+                _localSocket = null;
+                status = true;
             }
 
-            _localSocket.ConnectionReceived -= LocalSocketConnectionReceived;
-            _localSocket.Dispose();
-            _localSocket = null;
+            return status;
         }
 
         /// <summary>
@@ -116,13 +139,23 @@ namespace P2PHelper
         /// </summary>
         private async void LocalSocketConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            using (var reader = new StreamReader(args.Socket.InputStream.AsStreamForRead()))
+            using (var reader = new DataReader(args.Socket.InputStream))
             {
-                // Read the message.
-                string message = await reader.ReadLineAsync();
+                reader.InputStreamOptions = InputStreamOptions.None;
+
+                //Read the length of the payload that will be received.
+                byte[] payloadSize = new byte[(uint)BitConverter.GetBytes(0).Length];
+                await reader.LoadAsync((uint)payloadSize.Length);
+                reader.ReadBytes(payloadSize);
+
+                //Read the payload.
+                int size = BitConverter.ToInt32(payloadSize, 0);
+                byte[] payload = new byte[size];
+                await reader.LoadAsync((uint)size);
+                reader.ReadBytes(payload);
 
                 // Notify subscribers that a message was received.
-                MessageReceived(this, new MessageReceivedEventArgs { Message = message });
+                MessageReceived(this, new TcpMessageReceivedEventArgs { Message = payload });
             }
         }
 
@@ -136,12 +169,51 @@ namespace P2PHelper
         }
 
         /// <summary>
+        /// Serializes an object by using DataContractJsonSerializer.
+        /// </summary>
+        private byte[] SerializeData(object data)
+        {
+            using (var stream = new MemoryStream())
+            {
+                new DataContractJsonSerializer(data.GetType()).WriteObject(stream, data);
+                return stream.ToArray();
+            }
+        }
+
+        /// <summary>
         /// Disposes the RemoteSocket.
         /// </summary>
         private void DisconnectFromRemote()
         {
             _remoteSocket.Dispose();
             _remoteSocket = null;
+        }
+    }
+
+    /// <summary>
+    /// The event args that contain the message.
+    /// </summary>
+    public class TcpMessageReceivedEventArgs : EventArgs, IMessageReceivedEventArgs
+    {
+        public byte[] Message { get; set; }
+
+        /// <summary>
+        /// Deserializes Message by using the DataContractJsonSerializer.
+        /// </summary>
+        void IMessageReceivedEventArgs.GetDeserializedMessage(ref object message)
+        {
+            using (var stream = new MemoryStream(Message))
+            {
+                message = new DataContractJsonSerializer(message.GetType()).ReadObject(stream);
+            }
+        }
+
+        /// <summary>
+        /// Converts the Message to a string.
+        /// </summary>
+        public override string ToString()
+        {
+            return System.Text.Encoding.ASCII.GetString(Message);
         }
     }
 }

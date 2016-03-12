@@ -220,7 +220,7 @@ namespace P2PHelper
                         await writer.FlushAsync();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     status = false;
                 }

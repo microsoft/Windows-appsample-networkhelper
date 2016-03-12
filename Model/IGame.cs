@@ -49,5 +49,5 @@ namespace QuizGame.Model
 
     public class QuestionEventArgs : EventArgs { public Question Question { get; set; } }
 
-    public class HostJoinStatusMessageReceivedArgs : EventArgs { public bool IsJoined { get; set; } }
+    public class PlayerJoinedEventArgs : EventArgs { public bool IsJoined { get; set; } }
 }

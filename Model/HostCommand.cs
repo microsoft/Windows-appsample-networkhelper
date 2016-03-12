@@ -26,19 +26,17 @@ using System.Runtime.Serialization;
 
 namespace QuizGame.Model
 {
-    [DataContract]
-    public class HostCommandData
+    public class HostCommand
     {
-        [DataMember] public Command Command { get; set; }
-        [DataMember] public string PlayerName { get; set; }
-        [DataMember] public object Data { get; set; }
+        public Command Command { get; set; }
+        public string PlayerName { get; set; }
+        public int QuestionAnswer { get; set; }
     }
 
-    [DataContract]
     public enum Command
     {
-        [EnumMember] Join,
-        [EnumMember] Leave,
-        [EnumMember] Answer
+        Join = 0,
+        Leave,
+        Answer
     };
 }
