@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkHelper", "NetworkHelper\NetworkHelper.csproj", "{737229AE-D189-4765-B37B-31A326996A70}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoApps", "DemoApps", "{22973E4F-6A4C-4195-A64D-075136EF3704}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B38AD68C-E743-42A7-87D8-DD45AA490C17}"
+	ProjectSection(SolutionItems) = preProject
+		architecture.md = architecture.md
+		CONTRIBUTING.md = CONTRIBUTING.md
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizGame", "DemoApps\QuizGame\QuizGame.csproj", "{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{737229AE-D189-4765-B37B-31A326996A70}.Debug|ARM.ActiveCfg = Debug|ARM
+		{737229AE-D189-4765-B37B-31A326996A70}.Debug|ARM.Build.0 = Debug|ARM
+		{737229AE-D189-4765-B37B-31A326996A70}.Debug|x64.ActiveCfg = Debug|x64
+		{737229AE-D189-4765-B37B-31A326996A70}.Debug|x64.Build.0 = Debug|x64
+		{737229AE-D189-4765-B37B-31A326996A70}.Debug|x86.ActiveCfg = Debug|x86
+		{737229AE-D189-4765-B37B-31A326996A70}.Debug|x86.Build.0 = Debug|x86
+		{737229AE-D189-4765-B37B-31A326996A70}.Release|ARM.ActiveCfg = Release|ARM
+		{737229AE-D189-4765-B37B-31A326996A70}.Release|ARM.Build.0 = Release|ARM
+		{737229AE-D189-4765-B37B-31A326996A70}.Release|x64.ActiveCfg = Release|x64
+		{737229AE-D189-4765-B37B-31A326996A70}.Release|x64.Build.0 = Release|x64
+		{737229AE-D189-4765-B37B-31A326996A70}.Release|x86.ActiveCfg = Release|x86
+		{737229AE-D189-4765-B37B-31A326996A70}.Release|x86.Build.0 = Release|x86
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|ARM.ActiveCfg = Debug|ARM
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|ARM.Build.0 = Debug|ARM
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|ARM.Deploy.0 = Debug|ARM
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|x64.ActiveCfg = Debug|x64
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|x64.Build.0 = Debug|x64
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|x64.Deploy.0 = Debug|x64
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|x86.ActiveCfg = Debug|x86
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|x86.Build.0 = Debug|x86
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Debug|x86.Deploy.0 = Debug|x86
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|ARM.ActiveCfg = Release|ARM
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|ARM.Build.0 = Release|ARM
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|ARM.Deploy.0 = Release|ARM
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|x64.ActiveCfg = Release|x64
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|x64.Build.0 = Release|x64
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|x64.Deploy.0 = Release|x64
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|x86.ActiveCfg = Release|x86
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|x86.Build.0 = Release|x86
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E6EEB9AE-9164-4C96-AEAE-BF87E30C1F3F} = {22973E4F-6A4C-4195-A64D-075136EF3704}
+	EndGlobalSection
+EndGlobal
