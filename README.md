@@ -30,7 +30,7 @@ After you have the latest version of Windows 10 and development tools installed 
 - NetworkHelper to enable discovery and broadcasting of available games on the local network.
 - NetworkHelper to enable communication between the game and players.
 
-![QuizGame game created now waiting for players screenshot](Screenshots/QuizGame_CreateGame_lobby_scaled.png)
+![QuizGame game created now waiting for players screenshot](Screenshots/QuizGame_CreateGame_Lobby_scaled.png)
 ![QuizGame found a game to join screenshot](Screenshots/QuizGame_JoinGame_scaled.png)
 ![QuizGame game is in progress screenshot](Screenshots/QuizGame_GameInProgress_scaled.png)
 ![QuizGame question has been answered screenshot](Screenshots/QuizGame_QuestionAnswered_scaled.png)
