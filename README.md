@@ -47,7 +47,7 @@ Below are the details of the NetworkHelper library interface.
     - The ICommunicationChannel interface defines how message are sent and received between managers and participants.
 
 Below are the details of the TCP/UDP and DNS-SD implementations of the NetworkHelper library interface.
-* [TcpCommunicationChannel.cs](NetworkHelper/TcpCommunicationChannel.cs#L35), [UdpManager.cs](NetworkHelper/UdpManager.cs#L37),  [UdpParticipant.cs](NetworkHelper/UdpParticipant.cs#L37), [DnsSdManager.cs](NetworkHelper/DnsSdManager.cs#L36), and [DnsSdParticipant.cs](NetworkHelper/DnsSdParticipant.cs#L35):
+* [TcpCommunicationChannel.cs](NetworkHelper/TcpCommunicationChannel.cs#L35), [UdpManager.cs](NetworkHelper/UdpManager.cs#L37),  [UdpParticipant.cs](NetworkHelper/UdpParticipant.cs#L37), [DnsSdManager.cs](NetworkHelper/DnssdManager.cs#L36), and [DnsSdParticipant.cs](NetworkHelper/DnssdParticipant.cs#L35):
     - These classes are a concrete implementation of the interfaces and abstract classes described above for the TCP/UDP network protocol.
     - The UdpManager class broadcasts UDP messages to listening participants, listens for participant connection requests, and generates TcpCommunicationChannel objects for sending messages to connected participants.
     - The DnsSdManager class registers a DNS-SD instance to listening participants, listens for participant connection requests, and generates TcpCommunicationChannel objects for sending messages to connected participants.
