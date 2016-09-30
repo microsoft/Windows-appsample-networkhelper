@@ -1,4 +1,6 @@
-**Note:** This repo has been renamed from windows-appsample-quizgame to windows-appsample-networkhelper to put more emphasis on the networking aspect of the sample.
+﻿<!---
+  category: NetworkingAndWebServices Data
+-->
 
 # NetworkHelper sample library
 
