@@ -3,7 +3,8 @@ sample:
 - name: NetworkHelper sample library
   description: A sample library and demo mini-app that shows how to use UWP networking APIs to enable network discovery and communication in your games or apps. 
 This sample runs on the Universal Windows Platform (UWP).
-  generateZip: false
+  image: Screenshots/QuizGame_GameInProgress_scaled.png
+  generateZip: true
   author: karler
   languages:
   - csharp
