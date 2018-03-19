@@ -13,17 +13,18 @@ Specifically, the library provides the ability for:
 - Direct communication between discovered devices on the same Wi-Fi network with developer configurable messages.
 
 ## Running the sample
+
 To run the sample, you need the latest version of Windows 10 installed on your target and development machines. For more information about Windows 10 see the [Windows 10 Upgrade](https://go.microsoft.com/fwlink/p/?LinkId=619312) page.
 
-You will also need the latest version of Visual Studio and the Windows Software Development Kit (SDK) for Windows 10. You can get a free copy of these tools by visiting the [Downloads and tools for Windows 10](http://go.microsoft.com/fwlink/?LinkID=280676) page.
+To build this sample, you need [Visual Studio 2017 and the latest version of the Windows 10 SDK](http://go.microsoft.com/fwlink/?LinkID=280676). You can use the free Visual Studio Community Edition to build and run Windows Universal Platform (UWP) apps. To get the latest updates to Windows and the development tools, and to help shape their development, join 
+the [Windows Insider Program](https://insider.windows.com).
 
-After you have the latest version of Windows 10 and development tools installed on your machine, you are ready to run the sample in Visual Studio. To do this you need to set the StartUp Project to one of the Demo Apps in the DemoApps folder in Visual Studio. Below are instructions for setting QuizGame as the start up project.
+After you have the latest version of Windows 10 and the development tools installed on your machine, you are ready to run the sample in Visual Studio. To do this you need to set the StartUp Project to one of the Demo Apps in the DemoApps folder in Visual Studio. Below are instructions for setting QuizGame as the start up project.
 
 1. Open the NetworkHelper solution in Visual Studio
 2. In the Solution Explorer, right-click the QuizGame project, then select *Set as StartUp Project*.
 ![StartUp Project Screenshot](Screenshots/StartUpProject_scaled.png)
 3. You can now deploy to two different devices and Start Debugging (F5) or Start Without Debugging (Ctrl+F5) to try the sample out.
-
 
 **Important Note** This sample is supposed to run on two separate devices on the same local network. To get a full experience, deploy this sample to more than one device and make sure they are on the same Wi-Fi network. If you are running into any issues running this sample, make sure that you have started QuizGame on another device and started a new game. If this doesn't work, ensure that your Wi-Fi router or local network system allows UDP multicast packets to be sent and received. Some networks do not allow network discovery by blocking UDP multicast packets.
 
