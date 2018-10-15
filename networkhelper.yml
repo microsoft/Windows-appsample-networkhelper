@@ -5,7 +5,7 @@ sample:
 This sample runs on the Universal Windows Platform (UWP).
   image: Screenshots/QuizGame_GameInProgress_scaled.png
   generateZip: true
-  author: karler
+  author: msatranjr
   languages:
   - csharp
   technologies:
