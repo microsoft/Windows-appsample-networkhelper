@@ -2,6 +2,17 @@
   category: NetworkingAndWebServices Data
 -->
 
+---
+topic: sample
+languages:
+- csharp
+products:
+- windows
+- uwp
+statusNotificationTargets:
+- codefirst
+---
+
 # NetworkHelper sample library
 
 A sample library and demo mini-app that shows how to use UWP networking APIs to enable network discovery and communication in your games or apps. 
