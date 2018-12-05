@@ -1,8 +1,4 @@
-﻿<!---
-  category: NetworkingAndWebServices Data
--->
-
----
+﻿---
 topic: sample
 languages:
 - csharp
