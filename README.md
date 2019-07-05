@@ -5,7 +5,7 @@ languages:
 products:
 - windows
 - windows-uwp
-dscription: "A library and mini-app that show how to use UWP networking APIs to enable network discovery and communication in your games or apps."
+description: "A library and mini-app that show how to use UWP networking APIs to enable network discovery and communication in your games or apps."
 statusNotificationTargets:
 - codefirst@microsoft.com
 ---
