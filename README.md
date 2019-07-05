@@ -16,8 +16,7 @@ statusNotificationTargets:
 
 # NetworkHelper sample library
 
-A sample library and demo mini-app that shows how to use UWP networking APIs to enable network discovery and communication in your games or apps. 
-This sample runs on the Universal Windows Platform (UWP). 
+A sample library and demo mini-app that shows how to use UWP networking APIs to enable network discovery and communication in your games or apps. This sample runs on the Universal Windows Platform (UWP). 
 
 Specifically, the library provides the ability for:
 
